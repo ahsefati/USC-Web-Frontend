@@ -1,0 +1,28 @@
+<svg width="28" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <path d="m0,6.667l28,0l0,6.667l-28,0l0,-6.667z" id="a"/>
+  <filter y="-22.5%" x="-5.4%" width="110.7%" height="145%" id="b"/>
+  <path d="m0,13.333l28,0l0,6.667l-28,0l0,-6.667z" id="c"/>
+  <filter y="-22.5%" x="-5.4%" width="110.7%" height="145%" id="d"/>
+  <mask fill="#fff" id="e">
+   <rect id="svg_1" width="28" rx="3" height="20" fill-rule="evenodd" fill="#fff"/>
+  </mask>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_2" fill-rule="evenodd" fill="none">
+   <path id="svg_3" mask="url(#e)" fill="#262626" d="m0,0l28,0l0,6.667l-28,0l0,-6.667z"/>
+   <g id="svg_4" mask="url(#e)">
+    <use id="svg_5" xlink:href="#a" filter="url(#b)" fill="#000"/>
+    <use id="svg_6" xlink:href="#a" fill="#f01515"/>
+   </g>
+   <g id="svg_7" mask="url(#e)">
+    <use id="svg_8" xlink:href="#c" filter="url(#d)" fill="#000"/>
+    <use id="svg_9" xlink:href="#c" fill="#ffd521"/>
+   </g>
+  </g>
+  <rect stroke="#000" stroke-width="0" id="svg_10" height="6.74999" width="28.06245" y="-0.09373" x="-0.06247" fill="#229f3e"/>
+  <rect stroke="#000" stroke-width="0" id="svg_11" height="6.74999" width="28.18745" y="6.65626" x="-0.12497" fill="#ffffff"/>
+  <rect stroke="#000" stroke-width="0" id="svg_12" height="6.74999" width="28.18745" y="13.40624" x="-0.18747" fill="#da0001"/>
+ </g>
+</svg>

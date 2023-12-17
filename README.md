@@ -1,2 +1,1 @@
-# cryptodashboard
-For the interview of Coin Sigma Lab.
+# Kooch: Client Side (ReactJS)
