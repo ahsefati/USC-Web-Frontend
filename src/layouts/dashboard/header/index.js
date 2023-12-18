@@ -13,7 +13,6 @@ import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------
-
 const NAV_WIDTH = 280;
 
 const HEADER_MOBILE = 64;
@@ -55,7 +54,7 @@ export default function Header({ onOpenNav }) {
   return (
     <StyledRoot>
       <StyledToolbar>
-        <IconButton
+        {/* <IconButton
           onClick={onOpenNav}
           sx={{
             mr: 1,
@@ -64,9 +63,14 @@ export default function Header({ onOpenNav }) {
           }}
         >
           <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
+        </IconButton> */}
+        <Box sx={{display:{xs:'none', lg:'block'}}}>
+          <h3 style={{color:'black'}}>here will be a summary of newest news...</h3>
+        </Box>
+        <Box sx={{display:{xs:'block', lg:'none'}}}>
+          <h3 style={{color:'black'}}>CoinSigma</h3>
+        </Box>
 
-        <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack

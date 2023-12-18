@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API = axios.create({baseURL: 'https://api.kooch.help'})
+const API = axios.create({baseURL: 'http://localhost:5000'})
 
 API.interceptors.request.use((req)=>{
     if (localStorage.getItem('profile')){
@@ -32,3 +32,8 @@ export const getGeneralCosts = () => API.get("/tools/generalcosts")
 export const getAllJobs = () => API.get("/tools/jobs")
 export const searchJobsByNJ = (formData) => API.post("/tools/searchJobsByNJ", formData)
 export const searchFieldsByNF = (formData) => API.post("/tools/searchFieldsByNF", formData)
+
+
+// coins
+export const getLatestCoinsInfo = () => API.get("/tools/livecoinsdata")
+export const getLatestCoinInfo = (formData) => API.post(`/tools/livecoindata`, formData)

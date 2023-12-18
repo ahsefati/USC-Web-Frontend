@@ -18,7 +18,7 @@ import navConfig from './config';
 
 // ----------------------------------------------------------------------
 
-const NAV_WIDTH = 210;
+const NAV_WIDTH = 240;
 
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -63,9 +63,11 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
 
-      <Box onClick={()=>{window.location="https://kooch.help"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', height:'100px', cursor:'pointer' }} component={"img"} src="/assets/Kooch_main_logo.png"/>
+      <Box sx={{mx: 2.5 }}>
+        <h1 style={{fontSize:'200%', marginTop:'12px'}}>CoinSigma</h1>
+      </Box>
     
-      <Box sx={{ mb: 3, mx: 2.5, mt:1.5 }}>
+      <Box sx={{ mb: 3, mx: 2.5 }}>
         {user?
           <Link underline="none">
             <StyledAccount>

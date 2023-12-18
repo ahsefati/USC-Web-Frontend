@@ -1,5 +1,25 @@
 import * as api from '../index'
 
+export const getLatestCoinsInfo = async () => {
+    try {
+        const {data} = await api.getLatestCoinsInfo()
+        return data
+
+    } catch (error) {
+        return error
+    }
+}
+
+export const getLatestCoinInfo = async (id, formdata) => {
+    try {
+        const {data} = await api.getLatestCoinInfo(id, formdata)
+        return data
+
+    } catch (error) {
+        return error
+    }
+}
+
 export const getToolsInfo = async () => {
     try {
         const {data} = await api.getToolsInfo()
@@ -68,8 +88,6 @@ export const searchJobsByNJ = async (formData) => {
 
 export const searchFieldsByNF = async (formData) => {
     try {
-        console.log("OK!!")
-        console.log(formData)
         const {data} = await api.searchFieldsByNF(formData)
         return data
     } catch (error) {

@@ -7,7 +7,7 @@ import { Container, Link, Typography, Grid } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 
-import { AppToolsCard } from '../sections/@dashboard/app';
+import { CoinsCard } from '../sections/@dashboard/app';
 
 
 // components
@@ -69,7 +69,7 @@ export default function SavedTools() {
             <Grid container spacing={3} alignItems={'center'}>
               {savedTools.map((tool) => (
                   <Grid key={tool.id} item xs={12} sm={6} md={4}>
-                    <AppToolsCard link={tool.link} id={tool.id} title={tool.title} description={tool.description} icon={tool.icon} color={tool.color} isLiked={toolsInfo?.tools?.length > 0 ? toolsInfo.tools[tool.index].likes.filter((id)=> user?(id===user.result._id):false).length > 0 : false} numberOfLikes={toolsInfo?.tools?.length > 0 ? toolsInfo.tools[tool.index].numberOfLikes : 0} numberOfComments={toolsInfo?.tools?.length > 0 ? toolsInfo.tools[tool.index].numberOfComments : 0}/>
+                    <CoinsCard link={tool.link} id={tool.id} title={tool.title} description={tool.description} icon={tool.icon} color={tool.color} isLiked={toolsInfo?.tools?.length > 0 ? toolsInfo.tools[tool.index].likes.filter((id)=> user?(id===user.result._id):false).length > 0 : false} numberOfLikes={toolsInfo?.tools?.length > 0 ? toolsInfo.tools[tool.index].numberOfLikes : 0} numberOfComments={toolsInfo?.tools?.length > 0 ? toolsInfo.tools[tool.index].numberOfComments : 0}/>
                   </Grid>
                 ))
               }

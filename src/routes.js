@@ -27,7 +27,7 @@ import UniversitySearchPage from './pages/Tools/UniversitySearchPage';
 import CountryCitySearchPage from './pages/Tools/CountryCitySearchPage';
 import CostEstimationPage from './pages/Tools/CostEstimationPage';
 import JobsAndFieldsPage from './pages/Tools/JobsAndFieldsPage';
-import CVCreatorPage from './pages/Tools/CVCreatorPage';
+import CoinDetailsPage from './pages/Tools/CoinDetailsPage';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ export default function Router() {
         { path: 'countrycity', element: <CountryCitySearchPage /> },
         { path: 'costestimation', element: <CostEstimationPage /> },
         { path: 'jobsandfields', element: <JobsAndFieldsPage /> },
-        { path: 'cvcreator', element: <CVCreatorPage /> },
+        { path: 'coindetails/:id', element: <CoinDetailsPage /> },
       ],
     },
     {

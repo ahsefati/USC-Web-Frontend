@@ -7,9 +7,30 @@ export function fNumber(number) {
 }
 
 export function fCurrency(number) {
-  const format = number ? numeral(number).format('$0,0.00') : '';
+  const format = number ? numeral(number).format('$0,0.000') : '';
 
-  return result(format, '.00');
+  return result(format, '.000');
+}
+
+export function fSixDigitNumber(number) {
+  if (number !== undefined && !Number.isNaN(number)) {
+      // Convert to string and split at the decimal point
+      const parts = number.toString().split('.');
+      
+      // Count digits before the decimal point
+      const integerPartLength = parts[0].length;
+
+      // Calculate the needed decimal places to make the total length 6
+      let decimalPlaces = 6 - integerPartLength;
+
+      // Ensure decimalPlaces is not negative
+      decimalPlaces = Math.max(decimalPlaces, 0);
+
+      // Format the number with the required decimal places
+      return number.toFixed(decimalPlaces);
+  }
+
+  return '';
 }
 
 export function fPercent(number) {
@@ -19,9 +40,9 @@ export function fPercent(number) {
 }
 
 export function fShortenNumber(number) {
-  const format = number ? numeral(number).format('0.0a') : '';
+  const format = numeral(number).format('0.00a');
 
-  return result(format, '.0');
+  return result(format, '0.00');
 }
 
 export function fData(number) {
