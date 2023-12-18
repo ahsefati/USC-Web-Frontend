@@ -7,7 +7,7 @@ import 'moment';
 import 'chartjs-adapter-moment';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography, Divider, Card, Link } from '@mui/material';
+import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, TextField, Modal, Chip, Fade, Box, List, ListSubheader, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { useEffect, useState } from 'react';
@@ -21,8 +21,21 @@ import coins from '../_mock/tools';
 import Iconify from '../components/iconify';
 
 // sections
-import { getToolsInfo, getLatestCoinsInfo } from '../api/actions/tools';
+import { getToolsInfo, getLatestCoinsInfo, addCash, withdrawCash } from '../api/actions/tools';
 
+// Modal Styles
+const styledModal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '350px',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 2,
+  borderRadius: '10px',
+  border: '0px solid black',
+};
 
 // ----------------------------------------------------------------------
 
@@ -99,6 +112,24 @@ export default function DashboardAppPage() {
     }
   }
 
+  // Modal state
+  const [openModalToHandleCash, setOpenModalToHandleCash] = useState(0)
+  const [valueToHandleCash, setValueToHandleCash] = useState(0)
+  const [isLoadingForHandlingCash, setIsLoadingForHandlingCash] = useState(false)
+
+  const handleCash = async () => {
+    setIsLoadingForHandlingCash(true)
+    if (openModalToHandleCash===1){
+      const cashData = await addCash({valueToDeposit: valueToHandleCash})
+      console.log(cashData)
+    }else{
+      const cashData = await withdrawCash({valueToWithdraw: valueToHandleCash})
+      console.log(cashData)
+    }
+    setIsLoadingForHandlingCash(false)
+    setOpenModalToHandleCash(0)
+  }
+
   return (
     <>
       <Helmet>
@@ -124,6 +155,41 @@ export default function DashboardAppPage() {
                 </Grid>
                 {shares.length > 0 ?
                   <Grid container alignItems={'center'}>
+                    <Grid item xs={12} md={12} lg={4} xl={4}>
+                      <Grid container alignItems={'center'}>
+                        <Grid item xs={12}>
+                          <h3>Total Balance:</h3>
+                          <h1 style={{marginTop:'-18px'}}>${fSixDigitNumber(parseFloat(shares.reduce((a,b) => a+b)) + parseFloat(user?.result.cashBalance.$numberDecimal))}</h1>
+                        </Grid>
+                        <Grid item sx={{mt:-3}} xs={6}>
+                          <h3>Crypto Balance:</h3>
+                          <h2 style={{marginTop:'-18px'}}>${fSixDigitNumber(shares.reduce((a,b) => a+b))} </h2>
+                        </Grid>
+                        <Grid item sx={{mt:-3}} xs={6}>
+                          <h3>Cash Balance:</h3>
+                          <h2 style={{marginTop:'-18px'}}>${fSixDigitNumber(parseFloat(user?.result.cashBalance.$numberDecimal))}</h2>
+                        </Grid>
+                        <Grid container justifyContent={'center'}>
+                          <Grid item xs={8}>
+                            <hr/>
+                          </Grid>
+                        </Grid>
+                        <Grid container justifyContent={'center'}>
+                          <Grid item xs={11} lg={7} >
+                            <LoadingButton onClick={()=>setOpenModalToHandleCash(1)} sx={{mb:1}} fullWidth variant='contained' color='primary'>
+                              Deposit
+                            </LoadingButton>
+                            <LoadingButton onClick={()=>setOpenModalToHandleCash(2)} sx={{mb:1}} fullWidth variant='contained' color='error'>
+                              Withdraw
+                            </LoadingButton>
+                            <LoadingButton sx={{mb:2}} fullWidth variant='contained' color='warning'>
+                              Buy/Sell Coins
+                            </LoadingButton>
+                          </Grid>
+                          
+                        </Grid>
+                      </Grid>
+                    </Grid>
                     <Grid item xs={12} md={5} lg={3} xl={3}>
                         <>
                           <Pie data={dataPie} />
@@ -192,6 +258,42 @@ export default function DashboardAppPage() {
           
         </Grid>
 
+
+
+        {/* Modal to add cash */}
+        <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={openModalToHandleCash}
+            onClose={()=>setOpenModalToHandleCash(0)}
+            closeAfterTransition
+        >
+          <Fade in={openModalToHandleCash}>
+            <Box sx={styledModal}>
+              <Typography id="transition-modal-title" variant="h6" component="h2">
+                Deposit Money
+              </Typography>
+              <Grid container alignItems={'center'} spacing={1} sx={{mt:2, maxHeight:'450px', overflow:'auto',}}>
+                <Grid item xs={1}><h1>$</h1></Grid>
+                <Grid item xs={11}>
+                  <TextField fullWidth label={openModalToHandleCash===1?"Value to Deposit":"Value to Withdraw"} onChange={(e)=>setValueToHandleCash(e.target.value)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} sx={{mt:1}} justifyContent="space-around">
+                  <Grid item>
+                    <LoadingButton color='error' onClick={()=>setOpenModalToHandleCash(0)}>
+                      Close
+                    </LoadingButton>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <LoadingButton loading={isLoadingForHandlingCash} sx={{width:'100%'}} variant="contained" onClick={handleCash}>
+                      {openModalToHandleCash===1?'Deposit':'Withdraw'}
+                    </LoadingButton>
+                  </Grid>
+              </Grid>
+            </Box>
+          </Fade>
+        </Modal>
       </Container>
     </>
   );

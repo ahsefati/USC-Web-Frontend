@@ -37,3 +37,6 @@ export const searchFieldsByNF = (formData) => API.post("/tools/searchFieldsByNF"
 // coins
 export const getLatestCoinsInfo = () => API.get("/tools/livecoinsdata")
 export const getLatestCoinInfo = (formData) => API.post(`/tools/livecoindata`, formData)
+export const addCash = (formData) => API.patch(`/tools/addcash`, formData)
+export const withdrawCash = (formData) => API.patch(`/tools/withdrawcash`, formData)
+

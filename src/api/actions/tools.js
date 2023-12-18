@@ -1,5 +1,25 @@
 import * as api from '../index'
 
+export const addCash = async (formdata) => {
+    try {
+        console.log("OK---!")
+        const {data} = await api.addCash(formdata)
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
+export const withdrawCash = async (formdata) => {
+    try {
+        
+        const {data} = await api.withdrawCash(formdata)
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
 export const getLatestCoinsInfo = async () => {
     try {
         const {data} = await api.getLatestCoinsInfo()
