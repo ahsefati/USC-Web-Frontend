@@ -212,7 +212,7 @@ export default function CostEstimationPage() {
   return (
     <>
       <Helmet>
-        <title> Kooch | Cost Estimation </title>
+        <title> CoinSigma | Cost Estimation </title>
       </Helmet>
 
       <Container maxWidth="xl">

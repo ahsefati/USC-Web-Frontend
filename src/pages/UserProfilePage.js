@@ -28,7 +28,7 @@ export default function UserProfilePage() {
     {user?
       <>
         <Helmet>
-          <title> Kooch | Profile </title>
+          <title> CoinSigma | Profile </title>
         </Helmet>
 
         <Container maxWidth="xl">

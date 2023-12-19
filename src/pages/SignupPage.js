@@ -85,16 +85,15 @@ export default function SignupPage() {
   return (
     <>
       <Helmet>
-        <title> Kooch | Sign up </title>
+        <title> CoinSigma | Sign up </title>
       </Helmet>
 
       <StyledRoot>
         
         {mdUp && (
           <StyledSection>
-            <Box onClick={()=>{window.location="https://kooch.help"}} sx={{height:'70px', cursor:'pointer', width:'30%', ml:4}} component={"img"} src="/assets/Kooch_main_logo.png"/>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome to Kooch!
+              Hi, Welcome to CoinSigma!
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>
@@ -103,7 +102,7 @@ export default function SignupPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign up in Kooch
+              Sign up in CoinSigma
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 4 }}>

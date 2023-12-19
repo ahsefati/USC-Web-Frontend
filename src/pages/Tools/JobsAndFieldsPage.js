@@ -214,7 +214,7 @@ export default function JobsAndFieldsPage() {
   return (
     <>
       <Helmet>
-        <title> Kooch | Compare Salaries </title>
+        <title> CoinSigma | Compare Salaries </title>
       </Helmet>
 
       <Container maxWidth="xl">

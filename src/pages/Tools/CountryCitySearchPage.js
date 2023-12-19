@@ -169,7 +169,7 @@ export default function CountryCitySearchPage() {
   return (
     <>
       <Helmet>
-        <title> Kooch | Countries & Cities </title>
+        <title> CoinSigma | Countries & Cities </title>
       </Helmet>
 
       <Container maxWidth="xl">

@@ -94,7 +94,7 @@ export default function SavedDocuments() {
   return (
     <>
       <Helmet>
-        <title> Documents | Kooch </title>
+        <title> CoinSigma | Transactions </title>
       </Helmet>
 
       <Container>

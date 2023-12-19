@@ -73,7 +73,7 @@ export default function DashboardAppPage() {
     // Then set up the interval for subsequent calls
     const interval = setInterval(() => {
       updateCoinsData();
-    }, 2500);
+    }, 2000);
   
     
     // Clear the interval when the component is unmounted
@@ -173,7 +173,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | KOOCH </title>
+        <title>CoinSigma | Dashboard</title>
       </Helmet>
 
       <Container maxWidth="xl">

@@ -14,19 +14,11 @@ import ForgotPassPage from './pages/ForgotPassPage';
 
 // Main Pages
 import Page404 from './pages/Page404';
-import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
-import SavedDocuments from './pages/SavedDocuments';
 import SavedTools from './pages/SavedTools';
-import KoochStats from './pages/KoochStats';
-import UserRanking from './pages/UserRanking';
 import UserProfilePage from './pages/UserProfilePage';
 
 // Tools
-import UniversitySearchPage from './pages/Tools/UniversitySearchPage';
-import CountryCitySearchPage from './pages/Tools/CountryCitySearchPage';
-import CostEstimationPage from './pages/Tools/CostEstimationPage';
-import JobsAndFieldsPage from './pages/Tools/JobsAndFieldsPage';
 import CoinDetailsPage from './pages/Tools/CoinDetailsPage';
 
 // ----------------------------------------------------------------------
@@ -39,16 +31,8 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'saveddocuments', element: <SavedDocuments /> },
         { path: 'savedtools', element: <SavedTools /> },
-        { path: 'koochstats', element: <KoochStats /> },
-        { path: 'blog', element: <BlogPage /> },
-        { path: 'usersranking', element: <UserRanking /> },
         { path: 'userprofile', element: <UserProfilePage /> },
-        { path: 'universities', element: <UniversitySearchPage /> },
-        { path: 'countrycity', element: <CountryCitySearchPage /> },
-        { path: 'costestimation', element: <CostEstimationPage /> },
-        { path: 'jobsandfields', element: <JobsAndFieldsPage /> },
         { path: 'coindetails/:id', element: <CoinDetailsPage /> },
       ],
     },

@@ -14,9 +14,14 @@ import account from '../../../_mock/account';
 
 const MENU_OPTIONS_LOGGEDIN = [
   {
-    label: 'Home',
+    label: 'Dashboard',
     icon: 'eva:home-fill',
     to: '/dashboard'
+  },
+  {
+    label: 'Transactions',
+    icon: 'eva:person-fill',
+    to:'/dashboard/savedtools'
   },
   {
     label: 'Settings',

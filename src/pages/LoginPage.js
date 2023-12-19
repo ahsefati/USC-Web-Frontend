@@ -90,7 +90,6 @@ export default function LoginPage() {
 
         {mdUp && (
           <StyledSection>
-            <Box onClick={()=>{window.location="https://kooch.help"}} sx={{height:'70px', cursor:'pointer', width:'30%', ml:4}} component={"img"} src="/assets/Kooch_main_logo.png"/>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
               Hi, Welcome to CoinSigma!
             </Typography>

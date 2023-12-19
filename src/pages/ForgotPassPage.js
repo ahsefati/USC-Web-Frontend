@@ -56,16 +56,15 @@ export default function ForgotPassPage() {
   return (
     <>
       <Helmet>
-        <title> Kooch | Forgot Password </title>
+        <title> CoinSigma | Forgot Password </title>
       </Helmet>
 
       <StyledRoot>
 
         {mdUp && (
           <StyledSection>
-            <Box onClick={()=>{window.location="https://kooch.help"}} sx={{height:'70px', cursor:'pointer', width:'30%', ml:4}} component={"img"} src="/assets/Kooch_main_logo.png"/>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome to Kooch!
+              Hi, Welcome to CoinSigma!
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>
