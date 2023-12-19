@@ -12,9 +12,9 @@ const navConfig = [
   //   icon: 'system-uicons:document-stack',
   // },
   {
-    title: 'Saved Tools',
+    title: 'Transactions',
     path: '/dashboard/savedtools',
-    icon: 'ic:round-bookmark',
+    icon: 'material-symbols:document-scanner-outline-rounded',
   },
   // {
   //   title: 'blog',

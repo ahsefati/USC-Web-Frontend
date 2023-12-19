@@ -41,29 +41,6 @@ export default function UserProfilePage() {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
               <UserProfileCard key={user.result._id} author={user.result.name} avatar={user.result.avatar} joined={faker.date.past()}/>
-              <Card sx={{mt:2, borderRadius:'15px', padding:'15px'}}>
-                <Grid container alignItems={'center'}>
-
-                  <Grid item xs={8}>
-                    <Typography variant='h5'>  
-                      Balance: <strong>${user.result.balance}</strong>
-                    </Typography>
-                    <Divider sx={{width:'50%', mb:1}}/>
-                    <Typography variant='body'>
-                      - You have <strong>{user.result.points}</strong> points.<br/>
-                      <Link to="/howtoearnmorepoints" component={RouterLink} underline="hover">
-                        Click to earn more!
-                      </Link>
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4} textAlign='center'>
-                    <Iconify sx={{fill:'red'}} icon={'dashicons:awards'} width={52} height={52}/><br/>
-                    <Typography variant='h6'>  
-                      Rank <strong>{user.result?.rank}</strong>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Card>
             </Grid>
 
             <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>

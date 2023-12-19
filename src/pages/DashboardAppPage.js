@@ -21,7 +21,7 @@ import coins from '../_mock/tools';
 import Iconify from '../components/iconify';
 
 // sections
-import { getToolsInfo, getLatestCoinsInfo, addCash, withdrawCash } from '../api/actions/tools';
+import { getLatestCoinsInfo, addCash, withdrawCash, buyCoin, sellCoin } from '../api/actions/tools';
 
 // Modal Styles
 const styledModal = {
@@ -41,11 +41,12 @@ const styledModal = {
 
 export default function DashboardAppPage() {
   
-  const user = JSON.parse(localStorage.getItem('profile'))
+  let user = JSON.parse(localStorage.getItem('profile'))
 
   const [coinsData, setCoinsData] = useState(coins)
 
   const updateCoinsData = async () => {
+    user = JSON.parse(localStorage.getItem('profile'))
     const data = await getLatestCoinsInfo()
     const updatedCoins = data.map(coin => {
       // Find the corresponding mock coin data
@@ -72,7 +73,7 @@ export default function DashboardAppPage() {
     // Then set up the interval for subsequent calls
     const interval = setInterval(() => {
       updateCoinsData();
-    }, 1000);
+    }, 2500);
   
     
     // Clear the interval when the component is unmounted
@@ -83,6 +84,7 @@ export default function DashboardAppPage() {
   
   const labels = coinsData.filter(item => item.balance > 0).map(item => item.title)
   const shares = coinsData.filter(item => item.balance > 0).map(item => parseFloat(item.balance)*parseFloat(item.price))
+  const coinBalance = shares.length > 0 ? shares.reduce((a,b) => a+b) : 0
   const sumOfShares = shares.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
   const adjPie = shares?.map(share => (100*share/sumOfShares))
   const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'];
@@ -112,23 +114,61 @@ export default function DashboardAppPage() {
     }
   }
 
-  // Modal state
+
+  // Modal state for handling cash
   const [openModalToHandleCash, setOpenModalToHandleCash] = useState(0)
   const [valueToHandleCash, setValueToHandleCash] = useState(0)
   const [isLoadingForHandlingCash, setIsLoadingForHandlingCash] = useState(false)
-
   const handleCash = async () => {
     setIsLoadingForHandlingCash(true)
     if (openModalToHandleCash===1){
       const cashData = await addCash({valueToDeposit: valueToHandleCash})
       console.log(cashData)
+      localStorage.setItem('profile', JSON.stringify({...cashData}))
     }else{
       const cashData = await withdrawCash({valueToWithdraw: valueToHandleCash})
       console.log(cashData)
+      localStorage.setItem('profile', JSON.stringify({...cashData}))
     }
     setIsLoadingForHandlingCash(false)
     setOpenModalToHandleCash(0)
   }
+
+  const handleCoin = async () => {
+    if (operationMode===0){
+      const coinData = await buyCoin({valueToHandleCoin, idToHandleCoin})
+      localStorage.setItem('profile', JSON.stringify({...coinData}))
+    }else{
+      const coinData = await sellCoin({valueToHandleCoin, idToHandleCoin})
+      localStorage.setItem('profile', JSON.stringify({...coinData}))
+    }
+    updateCoinsData()
+    setOpenModalToHandleCoins(0)
+  }
+
+  // Modal for handling coin
+  const [openModalToHandleCoins, setOpenModalToHandleCoins] = useState(0)
+  const [idToHandleCoin, setIdToHandleCoin] = useState("bitcoin")
+  const [valueToHandleCoin, setValueToHandleCoin] = useState(0)
+  const [disableSendingOffer, setDisableSendingOffer] = useState(false)
+  const [operationMode, setOperationMode] = useState(0)
+
+  const handleOnChangeBuySellAmount = (value) => {
+    setValueToHandleCoin(value)
+    if (operationMode===0 && value > parseFloat(user?.result.cashBalance.$numberDecimal)){
+      setDisableSendingOffer(true)
+    }else if (operationMode===0 && value < parseFloat(user?.result.cashBalance.$numberDecimal)){
+      setDisableSendingOffer(false)
+    }
+
+    if (operationMode===1 && value > parseFloat(coinsData.filter(coin=>coin.id===idToHandleCoin)[0].balance)){
+      setDisableSendingOffer(true)
+    } else if (operationMode===1 && value < parseFloat(coinsData.filter(coin=>coin.id===idToHandleCoin)[0].balance)) {
+      setDisableSendingOffer(false)
+    }
+  }
+
+
 
   return (
     <>
@@ -154,7 +194,7 @@ export default function DashboardAppPage() {
                   <Typography variant='h4' sx={{px:2, mb:1}}>Your Portfolio</Typography>
                 </Grid>
                 {shares.length > 0 ?
-                  <Grid container alignItems={'center'}>
+                  <Grid container alignItems={'center'} justifyContent={'space-evenly'}>
                     <Grid item xs={12} md={12} lg={4} xl={4}>
                       <Grid container alignItems={'center'}>
                         <Grid item xs={12}>
@@ -163,7 +203,7 @@ export default function DashboardAppPage() {
                         </Grid>
                         <Grid item sx={{mt:-3}} xs={6}>
                           <h3>Crypto Balance:</h3>
-                          <h2 style={{marginTop:'-18px'}}>${fSixDigitNumber(shares.reduce((a,b) => a+b))} </h2>
+                          <h2 style={{marginTop:'-18px'}}>${fSixDigitNumber(coinBalance)} </h2>
                         </Grid>
                         <Grid item sx={{mt:-3}} xs={6}>
                           <h3>Cash Balance:</h3>
@@ -182,7 +222,7 @@ export default function DashboardAppPage() {
                             <LoadingButton onClick={()=>setOpenModalToHandleCash(2)} sx={{mb:1}} fullWidth variant='contained' color='error'>
                               Withdraw
                             </LoadingButton>
-                            <LoadingButton sx={{mb:2}} fullWidth variant='contained' color='warning'>
+                            <LoadingButton onClick={()=>setOpenModalToHandleCoins(1)} sx={{mb:2}} fullWidth variant='contained' color='warning'>
                               Buy/Sell Coins
                             </LoadingButton>
                           </Grid>
@@ -190,22 +230,34 @@ export default function DashboardAppPage() {
                         </Grid>
                       </Grid>
                     </Grid>
-                    <Grid item xs={12} md={5} lg={3} xl={3}>
-                        <>
-                          <Pie data={dataPie} />
-                          <h5>Shares of Coins (%)</h5>
-                        </>
+                    <Grid item xs={12} md={5} lg={3} xl={3} sx={{ml:-2}}>
+                        <Pie data={dataPie} />
+                        <h5>Shares of Coins (%)</h5>
                     </Grid>
-                    <Grid item xs={12} md={7} lg={5} xl={5}>
-                        <>
-                          <h2>Live Balance: ${fSixDigitNumber(shares.reduce((a,b) => a+b))}</h2>
-                          <Bar data={dataBar} options={optionsBar}/>
-                          <h5>Stock of Coins ($)</h5>
-                        </>
+                    <Grid item xs={12} md={7} lg={5} xl={5} sx={{mr:2}}>
+                        <h2>Live Balance: ${fSixDigitNumber(shares.reduce((a,b) => a+b))}</h2>
+                        <Bar data={dataBar} options={optionsBar}/>
+                        <h5>Stock of Coins ($)</h5>
                     </Grid>
                   </Grid>
                   :
-                  <h5>You don't have anything in you wallet yet.</h5>
+                  <Grid container justifyContent={'center'}>
+                    <Grid xs={12} md={6} lg={6}>
+                      <h3>You don't have anything in you wallet yet.</h3>
+                    </Grid>
+                    <Grid item xs={11} lg={3} >
+                      <LoadingButton onClick={()=>setOpenModalToHandleCash(1)} sx={{mb:1}} fullWidth variant='contained' color='primary'>
+                        Deposit
+                      </LoadingButton>
+                      <LoadingButton onClick={()=>setOpenModalToHandleCash(2)} sx={{mb:1}} fullWidth variant='contained' color='error'>
+                        Withdraw
+                      </LoadingButton>
+                      <LoadingButton onClick={()=>setOpenModalToHandleCoins(1)} sx={{mb:2}} fullWidth variant='contained' color='warning'>
+                        Buy/Sell Coins
+                      </LoadingButton>
+                    </Grid>
+                    
+                  </Grid>                   
                 }
               </Card>
             </Grid>
@@ -260,7 +312,7 @@ export default function DashboardAppPage() {
 
 
 
-        {/* Modal to add cash */}
+        {/* Modal to handle cash */}
         <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
@@ -271,7 +323,8 @@ export default function DashboardAppPage() {
           <Fade in={openModalToHandleCash}>
             <Box sx={styledModal}>
               <Typography id="transition-modal-title" variant="h6" component="h2">
-                Deposit Money
+                {openModalToHandleCash===1 && "Deposit Money"}
+                {openModalToHandleCash===2 && "Withdraw Money"}
               </Typography>
               <Grid container alignItems={'center'} spacing={1} sx={{mt:2, maxHeight:'450px', overflow:'auto',}}>
                 <Grid item xs={1}><h1>$</h1></Grid>
@@ -287,7 +340,101 @@ export default function DashboardAppPage() {
                   </Grid>
                   <Grid item xs={8}>
                     <LoadingButton loading={isLoadingForHandlingCash} sx={{width:'100%'}} variant="contained" onClick={handleCash}>
-                      {openModalToHandleCash===1?'Deposit':'Withdraw'}
+                      {openModalToHandleCash===2 && 'Withdraw'}
+                      {openModalToHandleCash===1 && 'Deposit'}
+                    </LoadingButton>
+                  </Grid>
+              </Grid>
+            </Box>
+          </Fade>
+        </Modal>
+
+
+        {/* Modal for Coin Selling/Buying */}
+        <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={openModalToHandleCoins}
+            onClose={()=>setOpenModalToHandleCoins(0)}
+            closeAfterTransition
+        >
+          <Fade in={openModalToHandleCoins}>
+            <Box sx={styledModal}>
+              <Typography id="transition-modal-title" variant="h6" component="h2">
+                Buy/Sell Coins
+              </Typography>
+              <Grid container alignItems={'center'} justifyContent={'center'} sx={{mt:2}}>
+                <Grid item xs={5} sx={{mr:2}}>
+                  <Select
+                    labelId="Select the Language Exam"
+                    fullWidth
+                    id="Which language exam are you going to take?"
+                    value={idToHandleCoin}
+                    label="Select the Language Exam"
+                    onChange={(e) => setIdToHandleCoin(e.target.value)}
+                  >
+                    <MenuItem value={"bitcoin"}>BTC</MenuItem>
+                    <MenuItem value={"ethereum"}>ETH</MenuItem>
+                    <MenuItem value={"tether"}>USDT</MenuItem>
+                    <MenuItem value={"binance-coin"}>BNB</MenuItem>
+                    <MenuItem value={"solana"}>SOL</MenuItem>
+                    <MenuItem value={"cardano"}>ADA</MenuItem>
+                    <MenuItem value={"usd-coin"}>USDC</MenuItem>
+                    <MenuItem value={"ripple"}>XRP</MenuItem>
+                  </Select>
+                </Grid>
+                <Grid item xs={6}>
+                  <LoadingButton onClick={()=>setOperationMode(0)} variant={operationMode===0?"contained":"outlined"} color='primary'>
+                    Buy
+                  </LoadingButton>
+                  <LoadingButton onClick={()=>setOperationMode(1)} sx={{ml:1}} variant={operationMode===1?"contained":"outlined"} color='primary'>
+                    Sell
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+              <Grid container justifyContent={'center'} alignItems={'center'} sx={{mt:2}}>
+                <Grid container justifyContent={'center'}>
+                  <Grid item xs={8}>
+                    <TextField fullWidth onChange={(e)=>handleOnChangeBuySellAmount(e.target.value)} label={operationMode===0?"Value to Buy":"Selling Amount"} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+                  </Grid>
+                  <Grid item xs={1} sx={{mr:1, ml:operationMode===0?1:1, mt:1}}>
+                    <Iconify width="30px" icon="mdi:arrow-right-bold-outline" />
+                  </Grid>
+                  <Grid item xs={2}>
+                    {operationMode===1?
+                      <img alt='dollar' height={'45px'} src={"/assets/images/coins/dollar.jpg"} />
+                      :
+                      <img alt='coin' height={'45px'} src={coinsData.filter(coin=>coin.id===idToHandleCoin)[0].icon} />
+                    }
+                  </Grid>
+                </Grid>
+
+                <Grid container justifyContent={'space-between'}>
+                  <Grid order={4} item xs={8} sx={{ml:1}}>
+                    {operationMode===0?
+                      <Typography color={disableSendingOffer?'red':'inherit'} variant='body2'>Available: ${fSixDigitNumber(parseFloat(user?.result.cashBalance.$numberDecimal))}</Typography>
+                      :
+                      <Typography color={disableSendingOffer?'red':'inherit'} variant='body2'>Available: {coinsData.filter(coin=>coin.id===idToHandleCoin)[0].balance}</Typography>
+                    }
+                  </Grid>
+                  <Grid order={4} item xs={3}>
+                    {operationMode===0?
+                      <Typography sx={{ml:2}} variant='body2'>{fSixDigitNumber(parseFloat(valueToHandleCoin/coinsData.filter(coin=>coin.id===idToHandleCoin)[0].price))}</Typography>
+                      :
+                      <Typography sx={{ml:2}} variant='body2'>{fSixDigitNumber(valueToHandleCoin*coinsData.filter(coin=>coin.id===idToHandleCoin)[0].price)}</Typography>
+                    }
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} sx={{mt:1}} justifyContent="space-around">
+                  <Grid item>
+                    <LoadingButton color='error' onClick={()=>setOpenModalToHandleCoins(0)}>
+                      Close
+                    </LoadingButton>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <LoadingButton disabled={disableSendingOffer} loading={isLoadingForHandlingCash} sx={{width:'100%'}} variant="contained" onClick={handleCoin}>
+                      Send Offer
                     </LoadingButton>
                   </Grid>
               </Grid>

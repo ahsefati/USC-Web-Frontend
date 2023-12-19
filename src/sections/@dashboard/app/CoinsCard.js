@@ -42,7 +42,7 @@ export default function CoinsCard ({coin}) {
         }}
       >
         <Grid container alignItems={'center'}>
-          <img alt={"bitcoin"} height={'48px'} src={coin.icon} />
+          <img alt='coin' height={'48px'} src={coin.icon} />
           <Typography sx={{ml:1}} variant="h4">{coin.title}</Typography>
         </Grid>
 

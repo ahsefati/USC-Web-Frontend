@@ -167,7 +167,7 @@ export default function CoinDetailsPage() {
               }}
             >
               <Grid container alignItems={'center'}>
-                <img alt={"bitcoin"} height={'48px'} src={coinData.icon} />
+                <img alt='coin' height={'48px'} src={coinData.icon} />
                 <Typography sx={{ml:1}} variant="h4">{coinData.title} ({coinData.symbol})</Typography>
               </Grid>
 

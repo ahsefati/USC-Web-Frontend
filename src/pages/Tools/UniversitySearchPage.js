@@ -138,7 +138,6 @@ export default function UniversitySearchPage() {
 
   const _getUniversitiesInfo = async () => {
     const data = await getUniversitiesInfo()
-    console.log(data.universities)
     setUniversitiesInfo(data.universities)
   }
 

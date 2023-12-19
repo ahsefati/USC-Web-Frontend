@@ -1,8 +1,36 @@
 import * as api from '../index'
 
+export const getTransactions = async () => {
+    try {
+        console.log("OK!")
+        const {data} = await api.getTransactions()
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const buyCoin = async (formdata) => {
+    try {
+        const {data} = await api.buyCoin(formdata)
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
+export const sellCoin = async (formdata) => {
+    try {
+        const {data} = await api.sellCoin(formdata)
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
 export const addCash = async (formdata) => {
     try {
-        console.log("OK---!")
         const {data} = await api.addCash(formdata)
         return data
     } catch (error) {
@@ -12,7 +40,6 @@ export const addCash = async (formdata) => {
 
 export const withdrawCash = async (formdata) => {
     try {
-        
         const {data} = await api.withdrawCash(formdata)
         return data
     } catch (error) {
