@@ -28,7 +28,7 @@ export default function Page404() {
       <Container>
         <StyledContent sx={{ textAlign: 'center', alignItems: 'center' }}>
 
-          <Box onClick={()=>{window.location="https://coinsigma.netlify.app"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', cursor:'pointer' }} component={"img"} src="/assets/Kooch_main_logo.png"/>
+          <Box onClick={()=>{window.location="https://USC-WEB.netlify.app"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', cursor:'pointer' }} component={"img"} src="/assets/Kooch_main_logo.png"/>
           <Typography variant="h3" paragraph>
             Sorry, page not found!
           </Typography>

@@ -11,11 +11,6 @@ const navConfig = [
   //   path: '/dashboard/saveddocuments',
   //   icon: 'system-uicons:document-stack',
   // },
-  {
-    title: 'Transactions',
-    path: '/dashboard/savedtools',
-    icon: 'material-symbols:document-scanner-outline-rounded',
-  },
   // {
   //   title: 'blog',
   //   path: '/dashboard/blog',

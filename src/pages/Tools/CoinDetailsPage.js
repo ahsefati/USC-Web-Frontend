@@ -141,7 +141,7 @@ export default function CoinDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | {id} Details </title>
+        <title> USC-WEB | {id} Details </title>
       </Helmet>
 
       <Container maxWidth="xl">

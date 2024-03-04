@@ -214,7 +214,7 @@ export default function JobsAndFieldsPage() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | Compare Salaries </title>
+        <title> USC-WEB | Compare Salaries </title>
       </Helmet>
 
       <Container maxWidth="xl">

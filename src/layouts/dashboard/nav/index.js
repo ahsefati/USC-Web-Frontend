@@ -64,7 +64,7 @@ export default function Nav({ openNav, onCloseNav }) {
     >
 
       <Box sx={{mx: 2.5 }}>
-        <h1 style={{fontSize:'200%', marginTop:'12px'}}>CoinSigma</h1>
+        <h1 style={{fontSize:'200%', marginTop:'12px'}}>USC-WEB</h1>
       </Box>
     
       <Box sx={{ mb: 3, mx: 2.5 }}>
@@ -104,40 +104,6 @@ export default function Nav({ openNav, onCloseNav }) {
 
 
       <Box sx={{ flexGrow: 1 }} />
-
-
-
-      <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-        <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
-          <Box
-            component="img"
-            src="/assets/illustrations/illustration_avatar.png"
-            sx={{ width: 100, position: 'absolute', top: -40 }}
-          />
-
-          <Box sx={{ textAlign: 'center' }}>
-           
-            <Typography gutterBottom variant="h6">
-              Need help?
-            </Typography>
-
-            <Grid container spacing={3}>
-              <Grid item xs={4}>
-                <Iconify icon={'logos:telegram'} width={24} height={24} />
-              </Grid>
-              <Grid item xs={4}>
-                <Iconify icon={'skill-icons:instagram'} width={24} height={24} />
-              </Grid>
-              <Grid item xs={4}>
-                <Iconify icon={'logos:twitter'} width={24} height={24} />
-              </Grid>
-            </Grid>
-
-          </Box>
-
-          
-        </Stack>
-      </Box>
     </Scrollbar>
   );
 

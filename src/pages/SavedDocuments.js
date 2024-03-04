@@ -94,7 +94,7 @@ export default function SavedDocuments() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | Transactions </title>
+        <title> USC-WEB | Transactions </title>
       </Helmet>
 
       <Container>

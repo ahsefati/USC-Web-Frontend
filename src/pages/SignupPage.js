@@ -56,7 +56,7 @@ export default function SignupPage() {
   const navigate = useNavigate()
 
   const handleUserLoginWithGoogle = (accessToken) => {
-
+    console.log(accessToken)
     const config = {
         headers:{
             Authorization: `Bearer ${accessToken}`
@@ -85,7 +85,7 @@ export default function SignupPage() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | Sign up </title>
+        <title> USC-WEB | Sign up </title>
       </Helmet>
 
       <StyledRoot>
@@ -93,7 +93,7 @@ export default function SignupPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome to CoinSigma!
+              Hi, Welcome to USC-WEB!
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>
@@ -102,12 +102,12 @@ export default function SignupPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign up in CoinSigma
+              Sign up in USC-WEB
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 4 }}>
               Already have an account? {''}
-              <Link component={RouterLink} to='/login' variant="subtitle2" underline='hover' sx={{cursor:'pointer'}}>Login to it!</Link>
+              <Link component={RouterLink} to='/login' variant="subtitle2" underline='hover' sx={{cursor:'pointer'}}>Login!</Link>
             </Typography>
 
             <Stack direction="row">

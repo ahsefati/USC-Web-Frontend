@@ -11,7 +11,7 @@ import { StyledChart } from './components/chart';
 
 export default function App() {
   return (
-    <GoogleOAuthProvider clientId="865555904435-cipjskg0onhkv685uqve4dljlh7s1cvv.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="677411199708-ntlvk2np3fidie6u6keknhl0942kqr72.apps.googleusercontent.com">
       <ThemeProvider>
         <ScrollToTop />
         <StyledChart />

@@ -28,7 +28,7 @@ export default function UserProfilePage() {
     {user?
       <>
         <Helmet>
-          <title> CoinSigma | Profile </title>
+          <title> USC-WEB | Profile </title>
         </Helmet>
 
         <Container maxWidth="xl">

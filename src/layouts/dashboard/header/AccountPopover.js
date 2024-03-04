@@ -19,14 +19,14 @@ const MENU_OPTIONS_LOGGEDIN = [
     to: '/dashboard'
   },
   {
-    label: 'Transactions',
-    icon: 'eva:person-fill',
-    to:'/dashboard/savedtools'
-  },
-  {
     label: 'Settings',
     icon: 'eva:person-fill',
     to:'/dashboard/userprofile'
+  },
+  {
+    label: 'Help',
+    icon: 'eva:person-fill',
+    to:'/dashboard/savedtools'
   },
 ];
 

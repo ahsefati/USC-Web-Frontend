@@ -56,7 +56,7 @@ export default function ForgotPassPage() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | Forgot Password </title>
+        <title> USC-WEB | Forgot Password </title>
       </Helmet>
 
       <StyledRoot>
@@ -64,7 +64,7 @@ export default function ForgotPassPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome to CoinSigma!
+              Hi, Welcome to USC-WEB!
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>

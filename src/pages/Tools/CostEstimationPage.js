@@ -212,7 +212,7 @@ export default function CostEstimationPage() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | Cost Estimation </title>
+        <title> USC-WEB | Cost Estimation </title>
       </Helmet>
 
       <Container maxWidth="xl">

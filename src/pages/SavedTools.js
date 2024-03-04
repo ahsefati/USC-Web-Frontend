@@ -139,7 +139,7 @@ export default function SavedTools() {
   return (
     <>
       <Helmet>
-        <title> Transactions History | CoinSigma </title>
+        <title> Transactions History | USC-WEB </title>
       </Helmet>
 
       <Container maxWidth="xl">

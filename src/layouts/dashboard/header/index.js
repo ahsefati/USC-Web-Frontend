@@ -65,10 +65,10 @@ export default function Header({ onOpenNav }) {
           <Iconify icon="eva:menu-2-fill" />
         </IconButton> */}
         <Box sx={{display:{xs:'none', lg:'block'}}}>
-          <h3 style={{color:'black'}}>here can be a summary of latest news related to blockchain world...</h3>
+          <h3 style={{color:'black'}}>Here will be latest updates in the website..</h3>
         </Box>
         <Box sx={{display:{xs:'block', lg:'none'}}}>
-          <h3 style={{color:'black'}}>CoinSigma</h3>
+          <h3 style={{color:'black'}}>USC-WEB</h3>
         </Box>
 
         <Box sx={{ flexGrow: 1 }} />

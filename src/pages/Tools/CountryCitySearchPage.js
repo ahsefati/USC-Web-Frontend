@@ -169,7 +169,7 @@ export default function CountryCitySearchPage() {
   return (
     <>
       <Helmet>
-        <title> CoinSigma | Countries & Cities </title>
+        <title> USC-WEB | Countries & Cities </title>
       </Helmet>
 
       <Container maxWidth="xl">
