@@ -1,1 +1,1 @@
-# Kooch: Client Side (ReactJS)
+# USC Research - Web Dev - Frontend
