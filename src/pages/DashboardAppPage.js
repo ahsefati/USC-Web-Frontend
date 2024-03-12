@@ -5,13 +5,21 @@ import { Bar, Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 import 'moment';
 import 'chartjs-adapter-moment';
+
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, TextField, Modal, Chip, Fade, Box, List, ListSubheader, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet'
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { fShortenNumber, fSixDigitNumber } from '../utils/formatNumber';
+
+// API for Points Test
+import { getPointsInBoxTest } from '../api/actions/points';
 
 import CoinsCard from '../sections/@dashboard/app/CoinsCard';
 // Data
@@ -20,28 +28,55 @@ import coins from '../_mock/tools';
 // components
 import Iconify from '../components/iconify';
 
-// sections
-import { getLatestCoinsInfo, addCash, withdrawCash, buyCoin, sellCoin } from '../api/actions/tools';
 
-// Modal Styles
-const styledModal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '350px',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 2,
-  borderRadius: '10px',
-  border: '0px solid black',
-};
+
+const defaultIcon = new L.Icon({
+  iconUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   
   const user = JSON.parse(localStorage.getItem('profile'))
+  const [pointsTest, setPointsTest] = useState([])
+
+  // The inputs for different Points APIs
+  const initialState = {
+    min_lat: 37.75, 
+    min_lon: -122.39, 
+    max_lat: 37.752,
+    max_lon: -122.392
+  }
+  const [formData, setFormData] = useState(initialState)
+
+  const handleCalculateMapCenter = () => {
+    const { sumLatitude, sumLongitude } = pointsTest.reduce((sums, point) => {
+      sums.sumLatitude += point.latitude;
+      sums.sumLongitude += point.longitude;
+      return sums;
+    }, { sumLatitude: 0, sumLongitude: 0 });
+    
+    const meanLatitude = sumLatitude / pointsTest.length;
+    const meanLongitude = sumLongitude / pointsTest.length;
+
+    return [meanLongitude, meanLatitude]
+  }
+
+  const handleGetPointsInBoxTest = async () => {
+    const data = await getPointsInBoxTest(formData)
+    setPointsTest(data)
+  }
+
+  useEffect(()=>{
+    handleGetPointsInBoxTest()
+  },[])
+
+  const renderMap = pointsTest.length > 0;
 
   return (
     <>
@@ -52,7 +87,31 @@ export default function DashboardAppPage() {
       <Container maxWidth="xl">
         {user ? 
           <Grid container spacing={3} sx={{mt:1}}>
-            <Typography variant="body2">Hi User!</Typography>
+            {!renderMap ?
+              <Typography variant="body2">Hi! I am loading...!!</Typography>
+              :
+              <MapContainer center={handleCalculateMapCenter()} zoom={16} style={{ height: '780px', width: '100%' }}>
+                <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                />
+                  {pointsTest.map(point => (
+                      <Marker
+                        key={point.point_id}
+                        position={[point.longitude, point.latitude]}
+                        icon={defaultIcon} 
+                      >
+                        <Popup>
+                            <strong>Username:</strong> {point.userid}<br/>
+                            <strong>Timestamp:</strong> {point.timestamp}<br/>
+                            <strong>Lon:</strong> {point.longitude}<br/>
+                            <strong>Lat:</strong> {point.latitude}<br/>
+                            <strong>#Points:</strong> {point.cluster_size}
+                        </Popup>
+                      </Marker>
+                  ))}
+              </MapContainer>
+            }
           </Grid>
           :
           <Grid container spacing={3} justifyContent='space-around' sx={{mb:10, mt:0}}>

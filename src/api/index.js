@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-// const API = axios.create({baseURL: 'http://localhost:5000/'})
+const API = axios.create({baseURL: 'http://localhost:5000/'})
 
-const API = axios.create({baseURL: 'https://usc-web-backend.onrender.com/'})
+// const API = axios.create({baseURL: 'https://usc-web-backend.onrender.com/'})
 
 API.interceptors.request.use((req)=>{
     if (localStorage.getItem('profile')){
@@ -44,4 +44,8 @@ export const addCash = (formData) => API.patch(`/tools/addcash`, formData)
 export const withdrawCash = (formData) => API.patch(`/tools/withdrawcash`, formData)
 export const buyCoin = (formData) => API.patch(`/tools/buycoin`, formData)
 export const sellCoin = (formData) => API.patch(`/tools/sellcoin`, formData)
+
+// Points
+export const getPointsInBoxTest = (formData) => API.post("/points/inabox", formData)
+
 

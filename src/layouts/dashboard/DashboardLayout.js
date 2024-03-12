@@ -22,7 +22,7 @@ const Main = styled('div')(({ theme }) => ({
   overflow: 'auto',
   minHeight: '100%',
   paddingTop: APP_BAR_MOBILE + 12,
-  paddingBottom: theme.spacing(10),
+  paddingBottom: theme.spacing(1),
   [theme.breakpoints.up('lg')]: {
     paddingTop: APP_BAR_DESKTOP + 12,
     paddingLeft: theme.spacing(2),
@@ -38,8 +38,6 @@ export default function DashboardLayout() {
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />
-
-      <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
       <Main>
         <Outlet />
