@@ -46,6 +46,6 @@ export const buyCoin = (formData) => API.patch(`/tools/buycoin`, formData)
 export const sellCoin = (formData) => API.patch(`/tools/sellcoin`, formData)
 
 // Points
-export const getPointsInBoxTest = (formData) => API.post("/points/inabox", formData)
-
+export const getPoints = (formData) => API.post(formData?.endpoint, formData)
+export const getAllSources = () => API.get(`/points/allsources`)
 
