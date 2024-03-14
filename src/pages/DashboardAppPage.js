@@ -9,6 +9,9 @@ import 'chartjs-adapter-moment';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, Stack, Input, Button} from '@mui/material';
+import {DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import {LocalizationProvider} from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LoadingButton } from '@mui/lab';
 
 import { useEffect, useState } from 'react';
@@ -170,17 +173,49 @@ export default function DashboardAppPage() {
                         <Typography variant="subtitle2">
                           {vars.varTitle}
                         </Typography>
-                        <Input
-                          fullWidth
-                          value={formData[vars.varCode]}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              [vars.varCode]: e.target.value,
-                            })
-                          }
-                          placeholder={vars.varTitle}
-                        />
+                        {vars.type==="normal_input"?
+                          <Input
+                            fullWidth
+                            value={formData[vars.varCode]}
+                            onChange={(e) =>
+                              {
+                                if (e.target.value!==''){
+                                  setFormData({
+                                    ...formData,
+                                    [vars.varCode]: e.target.value,
+                                  })
+                                }else{
+                                  const updatedFormData = { ...formData };
+                                  delete updatedFormData[vars.varCode];
+                                  setFormData(updatedFormData);
+                                }
+                              }
+                            }
+                            placeholder={vars.varTitle}
+                          />
+                          :
+                          vars.type==="datetime_input"?
+                          <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-US">
+                            <DateTimePicker
+                              value={formData[vars.varCode] ? new Date(formData[vars.varCode] * 1000) : null}
+                              onChange={(newValue) => {
+                                if (newValue!==''){
+                                  setFormData({
+                                    ...formData,
+                                    [vars.varCode]: newValue.unix()
+                                  })
+                                }else{
+                                  const updatedFormData = { ...formData };
+                                  delete updatedFormData[vars.varCode];
+                                  setFormData(updatedFormData);
+                                }
+                              }
+                              }
+                            />
+                          </LocalizationProvider>
+                          :
+                          'Nothing found. Contact me: ahsefati1998@gmail.com'
+                        }
                       </div>
                     )
                   })
