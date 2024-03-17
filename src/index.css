@@ -1,0 +1,8 @@
+@font-face{
+    font-family:adobe caslon pro;
+    font-style:normal;
+    font-weight:400;
+    src:local('Adobe Caslon Pro'),
+    url(https://fonts.cdnfonts.com/s/13341/ACaslonPro-Regular.woff) 
+    format('woff')
+}

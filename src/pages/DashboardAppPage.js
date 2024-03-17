@@ -115,7 +115,7 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xxl">
         {user ? 
-          <Grid container sx={{mt:1}} spacing={2}>
+          <Grid container sx={{mt:3}} spacing={2}>
             <Grid item xs={12} md={12} lg={3}>
               <Stack direction="column" alignItems="center">
                 {sources.length > 0 && 
@@ -227,8 +227,31 @@ export default function DashboardAppPage() {
                 </Stack>
               }
             </Grid>
-            <Grid item xs={12} md={12} lg={9}>
+            <Grid item xs={12} md={12} lg={9} sx={{display:{xs:'none', lg:'block'}}}>
                 <MapContainer key={`${latCenter}-${lonCenter}`} center={[latCenter, lonCenter]} zoom={16} style={{ height: '780px' }}>
+                  <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  />
+                    {pointsTest.length>0 && pointsTest.map(point => (
+                        <Marker
+                          key={point.point_id}
+                          position={[point.longitude, point.latitude]}
+                          icon={point.metadata==="Occupied Taxi"?greenIcon:blueIcon} 
+                        >
+                          <Popup>
+                              <strong>Username:</strong> {point.username}<br/>
+                              <strong>Date:</strong> {point.datetime}<br/>
+                              <strong>Lon:</strong> {point.longitude}<br/>
+                              <strong>Lat:</strong> {point.latitude}<br/>
+                              <strong>Metadata:</strong> {point.metadata}
+                          </Popup>
+                        </Marker>
+                    ))}
+                </MapContainer>
+            </Grid>
+            <Grid item xs={12} md={12} lg={9} sx={{display:{xs:'block', lg:'none'}}}>
+                <MapContainer key={`${latCenter}-${lonCenter}`} center={[latCenter, lonCenter]} zoom={16} style={{ height: '560px' }}>
                   <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -287,6 +310,9 @@ export default function DashboardAppPage() {
             </Grid>
           </Grid>
         }
+        <Grid item xs={24} md={24} lg={24} style={{paddingTop:'0px', marginTop:'0px'}}>
+          <h5>Copyright © 2024 - Supervised by <a href='https://scholar.google.com/citations?user=qWGk7FUAAAAJ&hl=en' style={{textDecoration:'none'}}>Dr. John Kerumm</a> and <a href='https://scholar.google.com/citations?user=jEdhxGMAAAAJ&hl=en' style={{textDecoration:'none'}}>Dr. Cyrus Shahabi</a>. Implemented by <a href='https://ahsefati.github.io' style={{textDecoration:'none'}}>Amirhossein Sefati</a>. All rights reserved.</h5>
+        </Grid>
       </Container>
     </>
   );

@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
 
 import koochLogo from '../../Logo/koochlogo.png'
+import uscLogo from '../../Logo/usc-shield.webp'
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -32,13 +33,13 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       ref={ref}
       component="div"
       sx={{
-        height: 50,
+        height: 60,
         display: 'inline-flex',
         ...sx,
       }}
       {...other}
     >
-      <img src={koochLogo} alt="LOGO"/>
+      <img src={uscLogo} alt="USC"/>
     </Box>
   );
 

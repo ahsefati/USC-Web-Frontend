@@ -29,42 +29,42 @@ import Scrollbar from '../../../components/scrollbar';
 // ----------------------------------------------------------------------
 
 const NOTIFICATIONS = [
-  {
-    id: faker.datatype.uuid(),
-    title: 'Your order is placed',
-    description: 'waiting for approval',
-    avatar: null,
-    type: 'order_placed',
-    createdAt: set(new Date(), { hours: 10, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: faker.name.fullName(),
-    description: 'answered to your comment on the Kooch',
-    avatar: '/assets/images/avatars/avatar_2.jpg',
-    type: 'friend_interactive',
-    createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new message',
-    description: '5 unread messages',
-    avatar: null,
-    type: 'chat_message',
-    createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new mail',
-    description: 'sent from a professor at UofC!',
-    avatar: null,
-    type: 'mail',
-    createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
+  // {
+  //   id: faker.datatype.uuid(),
+  //   title: 'Your order is placed',
+  //   description: 'waiting for approval',
+  //   avatar: null,
+  //   type: 'order_placed',
+  //   createdAt: set(new Date(), { hours: 10, minutes: 30 }),
+  //   isUnRead: false,
+  // },
+  // {
+  //   id: faker.datatype.uuid(),
+  //   title: faker.name.fullName(),
+  //   description: 'answered to your comment on the Kooch',
+  //   avatar: '/assets/images/avatars/avatar_2.jpg',
+  //   type: 'friend_interactive',
+  //   createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
+  //   isUnRead: false,
+  // },
+  // {
+  //   id: faker.datatype.uuid(),
+  //   title: 'You have new message',
+  //   description: '5 unread messages',
+  //   avatar: null,
+  //   type: 'chat_message',
+  //   createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
+  //   isUnRead: false,
+  // },
+  // {
+  //   id: faker.datatype.uuid(),
+  //   title: 'You have new mail',
+  //   description: 'sent from a professor at UofC!',
+  //   avatar: null,
+  //   type: 'mail',
+  //   createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
+  //   isUnRead: false,
+  // },
 ];
 
 export default function NotificationsPopover() {
@@ -93,9 +93,9 @@ export default function NotificationsPopover() {
 
   return (
     <>
-      <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
+      <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40,}}>
         <Badge badgeContent={totalUnRead} color="error">
-          <Iconify icon="eva:bell-fill" />
+          <Iconify style={{width:'40px', height:'25px'}} icon="eva:bell-fill" />
         </Badge>
       </IconButton>
 
@@ -131,49 +131,52 @@ export default function NotificationsPopover() {
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
+        {notifications.length>0 &&
+        <>
+          <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
+            <List
+              disablePadding
+              subheader={
+                <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
+                  New
+                </ListSubheader>
+              }
+            >
+              {notifications.filter((notification)=>notification.isUnRead===true).map((notification)=>{
+                  return (
+                    <NotificationItem key={notification.id} notification={notification} />
+                  )
+                })
+              }
+            </List>
 
-        <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                New
-              </ListSubheader>
-            }
-          >
-            {notifications.filter((notification)=>notification.isUnRead===true).map((notification)=>{
-                return (
-                  <NotificationItem key={notification.id} notification={notification} />
-                )
-              })
-            }
-          </List>
+            <List
+              disablePadding
+              subheader={
+                <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
+                  Read Before
+                </ListSubheader>
+              }
+            >
+              {/* DO NOT Response with more than 3 notifications here... */}
+              {notifications.filter((notification)=>notification.isUnRead===false).map((notification)=>{
+                  return (
+                    <NotificationItem key={notification.id} notification={notification} />
+                  )
+                })
+              }
+            </List>
+          </Scrollbar>
 
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                Read Before
-              </ListSubheader>
-            }
-          >
-            {/* DO NOT Response with more than 3 notifications here... */}
-            {notifications.filter((notification)=>notification.isUnRead===false).map((notification)=>{
-                return (
-                  <NotificationItem key={notification.id} notification={notification} />
-                )
-              })
-            }
-          </List>
-        </Scrollbar>
+          <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
-            View All
-          </Button>
-        </Box>
+          <Box sx={{ p: 1 }}>
+            <Button fullWidth disableRipple>
+              View All
+            </Button>
+          </Box>
+        </>
+        }
       </Popover>
     </>
   );
