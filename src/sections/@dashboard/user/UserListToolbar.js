@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
+import Papa from 'papaparse';
+
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, Button } from '@mui/material';
 // component
 import Iconify from '../../../components/iconify';
 
@@ -21,7 +23,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
     duration: theme.transitions.duration.shorter,
   }),
   '&.Mui-focused': {
-    width: 280,
+    width: 340,
     boxShadow: theme.customShadows.z24,
   },
   '& fieldset': {
@@ -33,12 +35,23 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UserListToolbar.propTypes = {
-  numSelected: PropTypes.number,
+  filteredPoints: PropTypes.array,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserListToolbar({filteredPoints, filterName, onFilterName }) {
+  
+  const handleDownload = () => {
+    const csvFormatted = Papa.unparse(filteredPoints)
+    const element = document.createElement('a');
+    const file = new Blob([csvFormatted], { type: 'text/csv' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'data.csv';
+    document.body.appendChild(element);
+    element.click();
+  }
+
   return (
     <StyledRoot>
       <StyledSearch
@@ -50,7 +63,8 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
               <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
             </InputAdornment>
           }
-        />
+      />
+      <Button startIcon={<Iconify icon="material-symbols:cloud-download-outline"/>} variant='outlined' onClick={handleDownload}>CSV Export</Button>
 
     </StyledRoot>
   );

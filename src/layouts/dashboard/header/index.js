@@ -70,8 +70,8 @@ export default function Header({ onOpenNav }) {
         </IconButton> */}
         <Box sx={{display:{xs:'none', lg:'block'}}}>
           <Stack direction={'row'}>
-              <Logo sx={{marginTop:'10px', height:'70px'}}/>
-              <h1 style={{color:'#990000', fontSize:'39px', fontFamily:'adobe caslon pro', margin:'25px 0px 5px 5px'}}>USC</h1>
+              <Logo sx={{marginTop:'10px', height:'55px'}}/>
+              <h1 style={{color:'#990000', fontSize:'34px', fontFamily:'adobe caslon pro', margin:'20px 0px 5px 5px'}}>USC</h1>
           </Stack>
         </Box>
         <Box sx={{display:{xs:'block', lg:'none'}}}>
