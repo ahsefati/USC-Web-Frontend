@@ -11,28 +11,28 @@ const LANGS = [
     value: 'en',
     label: 'English',
     icon: '/assets/icons/ic_flag_en.svg',
-    disabled: 0
+    disabled: false
   },
   {
     id: 1,
     value: 'de',
     label: 'German',
     icon: '/assets/icons/ic_flag_de.svg',
-    disabled: 1
+    disabled: true
   },
   {
     id: 2,
     value: 'fr',
     label: 'French',
     icon: '/assets/icons/ic_flag_fr.svg',
-    disabled: 1
+    disabled: true
   },
   {
     id: 3,
     value: 'fa',
     label: 'Farsi',
     icon: '/assets/icons/ic_flag_fa.svg',
-    disabled: 1
+    disabled: true
   },
 ];
 

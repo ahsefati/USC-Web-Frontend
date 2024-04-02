@@ -36,7 +36,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
               <MenuItem value={-1}>ALL</MenuItem>
               {sources.map(source => {
                 return (
-                  <MenuItem value={source.sourceId}>{source.name}</MenuItem>
+                  <MenuItem key={source.sourceId} value={source.sourceId}>{source.name}</MenuItem>
                 )
               })
 
@@ -59,7 +59,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
             <MenuItem value={-1}>Choose Your Command</MenuItem>
             {sqlCommands.map(command => {
               return (
-                <MenuItem value={command.id}>{command.title}</MenuItem>
+                <MenuItem key={command.id} value={command.id}>{command.title}</MenuItem>
               )
             })
 

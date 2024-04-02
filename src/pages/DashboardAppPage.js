@@ -105,8 +105,12 @@ export default function DashboardAppPage() {
                 <Button startIcon={<Iconify icon="material-symbols:table-rows-outline"/>} variant={resultMode===1?'contained':'outlined'} color={resultMode===1?'primary':'secondary'} onClick={()=>handleResultMode(1)}>Table</Button>
                 <Button startIcon={<Iconify icon="material-symbols:bar-chart-rounded"/>} variant={resultMode===2?'contained':'outlined'} color={resultMode===2?'primary':'secondary'} onClick={()=>handleResultMode(2)}>Statistics</Button>
               </Stack>
-              {resultMode===0 &&
-                <ResultMap latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+              {resultMode===0 && (
+                pointsTest.length <= 5000? 
+                <ResultMap formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                :
+                <h3>Too many points to show. Use the Table section instead.</h3>
+              )
               }
               {resultMode===1 &&
                 <ResultTable pointsTest={pointsTest}/>
