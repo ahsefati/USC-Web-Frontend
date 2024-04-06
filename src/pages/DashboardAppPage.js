@@ -4,7 +4,7 @@ import 'moment';
 import 'chartjs-adapter-moment';
 
 // @mui
-import { Grid, Container, Stack, Button, Table} from '@mui/material';
+import { Grid, Container, Stack, Button, Checkbox, FormControlLabel} from '@mui/material';
 
 import { useEffect, useState } from 'react';
 
@@ -13,6 +13,7 @@ import UserNotLoggedIn from '../sections/@dashboard/user/UserNotLoggedInMsg';
 import RequestToExecuteForm from '../sections/@dashboard/app/RequestToExecuteForm';
 import ResultMap from '../sections/@dashboard/app/ResultMap';
 import ResultTable from '../sections/@dashboard/app/ResultTable';
+import ResultStats from '../sections/@dashboard/app/ResultStats';
 
 // data
 import sqlCommands from '../data/sqlCommands';
@@ -29,9 +30,12 @@ export default function DashboardAppPage() {
   const [selectedSource, setSelectedSource] = useState(-1)
   const [sqlCommand, setSqlCommand] = useState(-1)
   const [pointsTest, setPointsTest] = useState([])
+  const [userStats, setUserStats] = useState([])
+  const [showMedianUsers, setShowMedianUsers] = useState(false)
+  const [generalStats, setGeneralStats] = useState()
   const [executeLoading, setExecuteLoading] = useState(false)
-  const [latCenter, setLatCenter] = useState(39)
-  const [lonCenter, setLonCenter] = useState(-122)
+  const [latCenter, setLatCenter] = useState(37.94)
+  const [lonCenter, setLonCenter] = useState(-122.34)
 
   // Result Mode
   const [resultMode, setResultMode] = useState(1)
@@ -65,9 +69,10 @@ export default function DashboardAppPage() {
 
   const handleGetPoints = async () => {
     setExecuteLoading(true)
-    console.log(formData)
     const data = await getPoints(formData)
-    setPointsTest(data)
+    setPointsTest(data.points)
+    setUserStats(data.user_stats)
+    setGeneralStats(data.general_stats)
     setExecuteLoading(false)
   }
 
@@ -99,24 +104,32 @@ export default function DashboardAppPage() {
         {user ? 
           <Grid container sx={{mt:1}} spacing={2}>
             <RequestToExecuteForm sources={sources} selectedSource={selectedSource} setSelectedSource={setSelectedSource} sqlCommand={sqlCommand} setSqlCommand={setSqlCommand} formData={formData} setFormData={setFormData} executeLoading={executeLoading} handleGetPoints={handleGetPoints}/>
-            <Grid item xs={12} md={12} lg={9}>
-              <Stack direction={"row"} spacing={1} sx={{mb:1}}>
+            <Grid item xs={12} md={12} lg={10}>
+              <Stack direction={"row"} spacing={1} sx={{mb:0}}>
                 <Button startIcon={<Iconify icon="material-symbols:map-outline"/>} variant={resultMode===0?'contained':'outlined'} color={resultMode===0?'primary':'secondary'} onClick={()=>handleResultMode(0)}>Map</Button>
                 <Button startIcon={<Iconify icon="material-symbols:table-rows-outline"/>} variant={resultMode===1?'contained':'outlined'} color={resultMode===1?'primary':'secondary'} onClick={()=>handleResultMode(1)}>Table</Button>
                 <Button startIcon={<Iconify icon="material-symbols:bar-chart-rounded"/>} variant={resultMode===2?'contained':'outlined'} color={resultMode===2?'primary':'secondary'} onClick={()=>handleResultMode(2)}>Statistics</Button>
               </Stack>
+              {resultMode===0 &&
+              <Stack direction={"row"} spacing={1} sx={{mb:1}}>
+                <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
+              </Stack>
+              }
               {resultMode===0 && (
                 pointsTest.length <= 5000? 
-                <ResultMap formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                <ResultMap userStats={userStats} showMedianUsers={showMedianUsers} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
                 :
-                <h3>Too many points to show. Use the Table section instead.</h3>
+                userStats.length <= 5000?
+                <ResultMap userStats={userStats} showMedianUsers formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                :
+                <h3>Too many points and users to show. Use the Table section instead.</h3>
               )
               }
               {resultMode===1 &&
                 <ResultTable pointsTest={pointsTest}/>
               }
               {resultMode===2 &&
-                <h3>To be developed...</h3>
+                <ResultStats generalStats={generalStats} userStats={userStats} points={pointsTest}/>
               }
             </Grid>
           </Grid>

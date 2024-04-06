@@ -1,8 +1,8 @@
 const sqlCommands = [
     {
         "id": 0,
-        "title": "Locate Within a Box",
-        "description": "This one will locate all the trajectory data within a pre-defined rectangle-shaped box.",
+        "title": "Use Pre-Defined Query",
+        "description": "This one will locate all the trajectory data within pre-defined commands.",
         "endpoint": "/points/inaboxwithfilter",
         "variables": [
             {
@@ -26,19 +26,6 @@ const sqlCommands = [
                 "type": "normal_input"
             },
             {
-                "varTitle": "Username",
-                "varCode": "username",
-                "type": "normal_input"
-            }
-        ]
-    },
-    {
-        "id": 1,
-        "title": "Locate Within a Time Range",
-        "description": "This one will locate all the trajectory data within a pre-defined range of time.",
-        "endpoint": "/points/inatimerangewithfilter",
-        "variables": [
-            {
                 "varTitle": "Start of Time",
                 "varCode": "start_time",
                 "type": "datetime_input"
@@ -53,6 +40,19 @@ const sqlCommands = [
                 "varCode": "username",
                 "type": "normal_input"
             }
+        ]
+    },
+    {
+        "id": 1,
+        "title": "Define Your Query",
+        "description": "This one will locate all the trajectory data using the sql command user defines.",
+        "endpoint": "/points/customsql",
+        "variables": [
+            {
+                "varTitle": "Your custom SQL",
+                "varCode": "custom_sql",
+                "type": "area_input"
+            },
         ]
     }
 ]

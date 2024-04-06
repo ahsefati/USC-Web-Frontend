@@ -41,10 +41,10 @@ UserListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-export default function UserListToolbar({filteredPoints, filterName, onFilterName }) {
+export default function UserListToolbar({filteredData, filterName, onFilterName }) {
   
   const handleDownload = () => {
-    const csvFormatted = Papa.unparse(filteredPoints)
+    const csvFormatted = Papa.unparse(filteredData)
     const element = document.createElement('a');
     const file = new Blob([csvFormatted], { type: 'text/csv' });
     element.href = URL.createObjectURL(file);

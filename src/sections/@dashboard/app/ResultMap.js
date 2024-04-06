@@ -20,11 +20,9 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData}) => {
+const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showMedianUsers = false}) => {
   const [ourMap, setOurMap] = useState()
   const [rectangleBounds, setRectangleBounds] = useState(null);
-  
-
   const onMapCreated = (map) => {
     setOurMap(map)
     const drawnItems = new L.FeatureGroup();
@@ -100,13 +98,13 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData}) =
   }, [latCenter, lonCenter, formData])
 
   return (
-    <MapContainer id="map" style={{ height: '800px' }} center={[latCenter, lonCenter]} zoom={16} whenCreated={onMapCreated}>
+    <MapContainer id="map" style={{ height: '750px' }} center={[latCenter, lonCenter]} zoom={16} whenCreated={onMapCreated}>
       <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
       {rectangleBounds && <Rectangle bounds={rectangleBounds} />}
-      {pointsTest.length > 0 &&
+      {pointsTest.length > 0 && !showMedianUsers &&
         pointsTest.map((point) => (
           <Marker
             key={point.point_id}
@@ -126,6 +124,28 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData}) =
             </Popup>
           </Marker>
         ))}
+      
+      {userStats.length > 0 && showMedianUsers &&
+        userStats.map((user) => {
+          return (
+            <Marker
+              key={user.username}
+              position={[user.medianlongitude, user.medianlatitude]}
+              icon={blueIcon}
+            >
+              <Popup>
+                <strong>Username:</strong> {user.username}
+                <br />
+                <strong>Min Date:</strong> {user.mintime}
+                <br />
+                <strong>Max Date:</strong> {user.maxtime}
+                <br />
+                <strong>#Points:</strong> {user.pointscount}
+              </Popup>
+            </Marker>
+          )
+        }
+        )}
     </MapContainer>
   );
 };

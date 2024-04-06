@@ -11,12 +11,12 @@ import { UserListHead, UserListToolbar } from '../user';
 
 
 const TABLE_HEAD = [
-  { id: 'pointid', label: 'Id', alignRight: false },
   { id: 'username', label: 'Username', alignRight: false },
-  { id: 'latitude', label:'Latitude', alignRight:false},
-  { id: 'longitude', label: 'Longitude', alignRight: false },
-  { id: 'datetime', label:'Date & Time', alignRight:false},
-  { id: 'metadata', label:'Metadata', alignRight:false},
+  { id: 'medianlatitude', label: 'Median Latitude', alignRight: false },
+  { id: 'medianlongitude', label:'Median Longitude', alignRight:false},
+  { id: 'mintime', label:'Minimum Date & Time', alignRight:false},
+  { id: 'maxtime', label:'Maximum Date & Time', alignRight:false},
+  { id: 'pointscount', label:'#Reported Points', alignRight:false},
 ];
 
 // StyledTable
@@ -66,13 +66,13 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_point) => _point.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 || (_point.metadata.toLowerCase().indexOf(query.toLowerCase()) !== -1 && _point.metadata !== undefined));
+    return filter(array, (_user) => _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ResultTable({pointsTest}) {
-  const [filteredPoints, setFilteredPoints] = useState([])
+export default function ResultStats({generalStats, userStats, points}) {
+  const [filteredUsers, setFilteredUsers] = useState([])
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('pointid');
@@ -100,18 +100,29 @@ export default function ResultTable({pointsTest}) {
   };
 
   useEffect(()=>{
-    if (pointsTest.length > 0){
-      console.log("ok!")
-      const _filteredPoints = applySortFilter(pointsTest, getComparator(order, orderBy), filterName);
-      setFilteredPoints(_filteredPoints)
+    if (userStats.length > 0){
+      const _filteredUsers = applySortFilter(userStats, getComparator(order, orderBy), filterName);
+      setFilteredUsers(_filteredUsers)
     }
-  }, [pointsTest, filterName, order, orderBy])
+  }, [userStats, filterName, order, orderBy])
 
   return (
-    <Grid container justifyContent='center' spacing={1}>
+    <Grid container justifyContent='center' spacing={1} style={{marginTop:'12px'}}>
+      <Grid item xs={3} justifyContent='center'>
+        <h3 style={{margin:0}}>#Points</h3>
+        <h2 style={{marginTop:0}}>{points && points.length}</h2>
+      </Grid>
+      <Grid item xs={3} justifyContent='center'>
+        <h3 style={{margin:0}}>#Users</h3>
+        <h2 style={{marginTop:0}}>{userStats && userStats.length}</h2>
+      </Grid>
+      <Grid item xs={4} justifyContent='center'>
+        <h3 style={{margin:0}}>Boundary Box:</h3>
+        <h3 style={{marginTop:0}}>({generalStats?.minlatitude}, {generalStats?.minlongitude}) ({generalStats?.maxlatitude}, {generalStats?.maxlongitude})</h3>
+      </Grid>
       <Grid item xs={12} justifyContent='center'>
         <Paper elevation={4} sx={{borderRadius:'25px'}}>
-          <UserListToolbar filteredData={filteredPoints} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filteredData={filteredUsers} filterName={filterName} onFilterName={handleFilterByName} />
           <Scrollbar>
             <TableContainer>
               <Table>
@@ -123,20 +134,11 @@ export default function ResultTable({pointsTest}) {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {filteredPoints?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { pointid, username, longitude, latitude, datetime, metadata} = row;
+                  {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    const { username, medianlatitude, medianlongitude, mintime, maxtime, pointscount} = row;
                     
                     return (
-                      <StyledTableRow key={pointid}>
-
-                        <StyledTableCell  component="th" scope="row" padding="normal">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap>
-                              <strong>{pointid}</strong>
-                            </Typography>
-                          </Stack>
-                        </StyledTableCell >
-
+                      <StyledTableRow key={username}>
 
                         <StyledTableCell  component="th" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={2}>
@@ -146,12 +148,13 @@ export default function ResultTable({pointsTest}) {
                           </Stack>
                         </StyledTableCell >
 
-                        <StyledTableCell  align="left">{latitude}</StyledTableCell >
-                        <StyledTableCell  align="left">{longitude}</StyledTableCell >
+                        <StyledTableCell  align="left">{medianlatitude}</StyledTableCell >
+                        <StyledTableCell  align="left">{medianlongitude}</StyledTableCell >
 
-                        <StyledTableCell  align="left">{datetime}</StyledTableCell >
+                        <StyledTableCell  align="left">{mintime}</StyledTableCell >
+                        <StyledTableCell  align="left">{maxtime}</StyledTableCell >
 
-                        <StyledTableCell  align="left">{metadata}</StyledTableCell >
+                        <StyledTableCell  align="left">{pointscount}</StyledTableCell >
 
                       </StyledTableRow>
                     );
@@ -166,7 +169,7 @@ export default function ResultTable({pointsTest}) {
           <TablePagination
             rowsPerPageOptions={[10, 50, 100, 300]}
             component="div"
-            count={filteredPoints.length}
+            count={filteredUsers.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

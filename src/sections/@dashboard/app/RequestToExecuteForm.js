@@ -18,8 +18,8 @@ RequestToExecuteForm.propTypes = {
 export default function RequestToExecuteForm({sources, selectedSource, setSelectedSource, sqlCommand, setSqlCommand, formData, setFormData, executeLoading, handleGetPoints}) {
 
   return (
-    <Grid item xs={12} md={12} lg={3}>
-      <Stack direction="column" alignItems="center">
+    <Grid item xs={12} md={12} lg={2}>
+      <Stack direction="column" alignItems="center" style={{marginTop:'-8px'}}>
         {sources.length > 0 && 
           <FormControl style={{marginTop:'12px'}} fullWidth>
             <InputLabel id="Select Source to Explore">Select Source to Explore:</InputLabel>
@@ -115,6 +115,9 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                       }
                     />
                   </LocalizationProvider>
+                  :
+                  vars.type==="area_input"?
+                  <textarea style={{height:'350px', width:'100%'}}/>
                   :
                   'Nothing found. Contact me: ahsefati1998@gmail.com'
                 }
