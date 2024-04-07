@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Rectangle, useMap } from 'react-leaflet';
+import { useState, useEffect, useRef } from 'react';
+import { Map, TileLayer, Marker, Popup, Rectangle, Polyline  } from 'react-leaflet';
+import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import L from 'leaflet';
 import 'leaflet-draw';
-import { Button } from '@mui/material';
 
 const greenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -20,10 +20,13 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showMedianUsers = false}) => {
+const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showMedianUsers, showGeneralHeatmap}) => {
   const [ourMap, setOurMap] = useState()
   const [rectangleBounds, setRectangleBounds] = useState(null);
-  const onMapCreated = (map) => {
+  const mapRef = useRef()
+
+  useEffect(()=>{
+    const map = mapRef.current.leafletElement;
     setOurMap(map)
     const drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
@@ -53,10 +56,10 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
         button.onclick = () => {
           setFormData({
             ...formData,
-            "min_lat": 0,
-            "min_lon": 0,
-            "max_lat": 0,
-            "max_lon": 0,
+            "min_lat": -90,
+            "min_lon": -180,
+            "max_lat": 90,
+            "max_lon": 180,
             "endpoint": ''
           })
           map.eachLayer((layer) => {
@@ -89,7 +92,7 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
       drawnItems.addLayer(layer);
       setRectangleBounds(layer.getBounds());
     });
-  };
+  },[])
 
   useEffect(()=>{
     if (ourMap){
@@ -97,14 +100,28 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
     }
   }, [latCenter, lonCenter, formData])
 
+  // Function to group points by username
+  const groupPointsByUser = (points) => {
+    const groupedPoints = {};
+    points.forEach((point) => {
+      if (!groupedPoints[point.username]) {
+        groupedPoints[point.username] = [];
+      }
+      groupedPoints[point.username].push(point);
+    });
+    return groupedPoints;
+  };
+
+  const groupedPoints = groupPointsByUser(pointsTest);  
+
   return (
-    <MapContainer id="map" style={{ height: '750px' }} center={[latCenter, lonCenter]} zoom={16} whenCreated={onMapCreated}>
+    <Map ref={mapRef} id="map" style={{ height: '750px' }} center={[latCenter, lonCenter]} zoom={16} >
       <TileLayer
           url="https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
       {rectangleBounds && <Rectangle bounds={rectangleBounds} />}
-      {pointsTest.length > 0 && !showMedianUsers &&
+      {pointsTest.length > 0 && !showMedianUsers && pointsTest.length < 5000 &&
         pointsTest.map((point) => (
           <Marker
             key={point.point_id}
@@ -146,7 +163,36 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
           )
         }
         )}
-    </MapContainer>
+
+      {showGeneralHeatmap &&
+        <HeatmapLayer 
+          fitBoundsOnUpdate 
+          fitBoundsOnLoad  
+          points={pointsTest.map((point)=>[point.longitude, point.latitude])} 
+          longitudeExtractor={m => m[1]}
+          latitudeExtractor={m => m[0]}
+          intensityExtractor={m => parseFloat(m[2]) || 1}
+
+        />
+      }
+
+      {/* Trajectory Lines
+      {Object.entries(groupedPoints).map(([username, userPoints]) => (
+        <Polyline
+          key={username}
+          positions={userPoints.map((point) => [point.longitude, point.latitude])}
+          color="blue"
+          weight={5}
+          opacity={0.7}
+        >
+          <Popup>
+            <strong>Username:</strong> {username}
+          </Popup>
+        </Polyline>
+      ))} */}
+
+
+    </Map>
   );
 };
 

@@ -32,6 +32,7 @@ export default function DashboardAppPage() {
   const [pointsTest, setPointsTest] = useState([])
   const [userStats, setUserStats] = useState([])
   const [showMedianUsers, setShowMedianUsers] = useState(false)
+  const [showGeneralHeatmap, setShowGeneralHeatmap] = useState(false)
   const [generalStats, setGeneralStats] = useState()
   const [executeLoading, setExecuteLoading] = useState(false)
   const [latCenter, setLatCenter] = useState(37.94)
@@ -112,18 +113,12 @@ export default function DashboardAppPage() {
               </Stack>
               {resultMode===0 &&
               <Stack direction={"row"} spacing={1} sx={{mb:1}}>
-                <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
+                  <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
+                  <FormControlLabel control={<Checkbox checked={showGeneralHeatmap} onClick={(e)=>setShowGeneralHeatmap(e.target.checked)}/>} label="Show Heat Map?"/>
               </Stack>
               }
-              {resultMode===0 && (
-                pointsTest.length <= 5000? 
-                <ResultMap userStats={userStats} showMedianUsers={showMedianUsers} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
-                :
-                userStats.length <= 5000?
-                <ResultMap userStats={userStats} showMedianUsers formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
-                :
-                <h3>Too many points and users to show. Use the Table section instead.</h3>
-              )
+              {resultMode===0 && 
+                <ResultMap userStats={userStats} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
               }
               {resultMode===1 &&
                 <ResultTable pointsTest={pointsTest}/>

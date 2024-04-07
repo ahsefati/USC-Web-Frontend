@@ -101,7 +101,6 @@ export default function ResultTable({pointsTest}) {
 
   useEffect(()=>{
     if (pointsTest.length > 0){
-      console.log("ok!")
       const _filteredPoints = applySortFilter(pointsTest, getComparator(order, orderBy), filterName);
       setFilteredPoints(_filteredPoints)
     }

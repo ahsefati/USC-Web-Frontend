@@ -2,7 +2,6 @@ import * as api from '../index'
 
 export const getTransactions = async () => {
     try {
-        console.log("OK!")
         const {data} = await api.getTransactions()
         return data
     } catch (error) {
