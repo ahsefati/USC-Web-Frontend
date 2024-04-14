@@ -20,39 +20,77 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showMedianUsers, showGeneralHeatmap}) => {
+const redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const removeAllControls = (map) => {
+  map._controlCorners.bottomleft.innerHTML = ''
+};
+
+
+const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, generalStats}) => {
   const [ourMap, setOurMap] = useState()
-  const [rectangleBounds, setRectangleBounds] = useState(null);
+  const [rectangleBounds, setRectangleBounds] = useState(null)
   const mapRef = useRef()
 
   useEffect(()=>{
-    const map = mapRef.current.leafletElement;
+    const map = mapRef.current.leafletElement
     setOurMap(map)
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
     
-    L.drawLocal.draw.toolbar.buttons.rectangle = "Draw"; // Change the text of the button
+    if (map) {
+      removeAllControls(map)
+    }
+
+    // Add FIT button
+    const FitZoomControl = L.Control.extend({
+      onAdd: (map) => {
+        const button = L.DomUtil.create('button', 'leaflet-control')
+        button.innerHTML = 'Fit'
+        button.style.cursor = 'pointer'
+        button.style.backgroundColor = 'white'
+        button.style.border = '2px solid lightgray'
+        button.style.borderRadius = '2px'
+        button.onclick = () => {
+          const bounds = L.latLngBounds(L.latLng(generalStats?.minlatitude, generalStats?.minlongitude), L.latLng(generalStats?.maxlatitude, generalStats?.maxlongitude));
+          map.fitBounds(bounds)
+        }
+        return button
+      }
+    })
+    const fitControl = new FitZoomControl({ position: 'bottomleft' })
+    
+    const drawnItems = new L.FeatureGroup()
+    map.addLayer(drawnItems)
+    
+    L.drawLocal.draw.toolbar.buttons.rectangle = "Rect"
+    L.drawLocal.draw.toolbar.buttons.polygon = "Poly"
+    // L.drawLocal.draw.toolbar.buttons.circlemarker = "Circle"
     
     const drawControl = new L.Control.Draw({
       draw: {
         rectangle: true,
-        polygon: false,
+        polygon: true,
         circle: false,
         marker: false,
         circlemarker: false,
         polyline: false
-      }
-    });
-    map.addControl(drawControl);
+      },
+      position:'bottomleft',  
+    })
     
     const ClearDrawingsControl = L.Control.extend({
       onAdd: (map) => {
         const button = L.DomUtil.create('button', 'leaflet-control');
-        button.innerHTML = '&#x274C;';
-        button.style.cursor = 'pointer'; 
-        button.style.backgroundColor = 'white';
-        button.style.border = '2px solid lightgray';
-        button.style.borderRadius = '2px';
+        button.innerHTML = '&#x274C;'
+        button.style.cursor = 'pointer'
+        button.style.backgroundColor = 'white'
+        button.style.border = '2px solid lightgray'
+        button.style.borderRadius = '2px'
         button.onclick = () => {
           setFormData({
             ...formData,
@@ -71,48 +109,71 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
         return button;
       }
     });
-    map.addControl(new ClearDrawingsControl({ position: 'topleft' }));
+    const clearControl = new ClearDrawingsControl({ position: 'bottomleft' })
+    
+    // Add all the defined controls
+    map.addControl(clearControl);
+    map.addControl(drawControl)
+    map.addControl(fitControl)
     
     map.on(L.Draw.Event.CREATED, (event) => {
-      const layer = event.layer;
-      const bounds = layer.getBounds();
-      setRectangleBounds(bounds);
-      const minLat = bounds.getSouth();
-      const maxLat = bounds.getNorth();
-      const minLon = bounds.getWest();
-      const maxLon = bounds.getEast();   
-      setFormData({
-        ...formData,
-        "min_lat": minLat,
-        "min_lon": minLon,
-        "max_lat": maxLat,
-        "max_lon": maxLon,
-        "endpoint": "/points/inaboxwithfilter"
-      })
-      drawnItems.addLayer(layer);
-      setRectangleBounds(layer.getBounds());
+      const layer = event.layer
+      const type = event.layerType;
+      if (type==="rectangle") {
+        const bounds = layer.getBounds()
+        setRectangleBounds(bounds)
+        const minLat = bounds.getSouth()
+        const maxLat = bounds.getNorth()
+        const minLon = bounds.getWest()
+        const maxLon = bounds.getEast()
+        setFormData({
+          ...formData,
+          "min_lat": minLat,
+          "min_lon": minLon,
+          "max_lat": maxLat,
+          "max_lon": maxLon,
+          "endpoint": "/points/inaboxwithfilter"
+        })
+        drawnItems.addLayer(layer)
+        setRectangleBounds(layer.getBounds())
+      } else if (type==="polygon"){
+        const polygon = layer.toGeoJSON(); // Convert drawn polygon to GeoJSON
+        event.layer.options.remove = false;
+        drawnItems.addLayer(layer);
+        setFormData({
+          ...formData,
+          "polygon_geo": polygon.geometry,
+          "endpoint": "/points/inaboxwithfilter"
+        })
+      }
     });
-  },[])
+  },[generalStats])
 
   useEffect(()=>{
     if (ourMap){
-      ourMap.setView([latCenter, lonCenter]);
+      ourMap.setView([latCenter, lonCenter])
     }
   }, [latCenter, lonCenter, formData])
 
   // Function to group points by username
   const groupPointsByUser = (points) => {
-    const groupedPoints = {};
+    const groupedPoints = {}
     points.forEach((point) => {
       if (!groupedPoints[point.username]) {
-        groupedPoints[point.username] = [];
+        groupedPoints[point.username] = []
       }
-      groupedPoints[point.username].push(point);
+      groupedPoints[point.username].push(point)
     });
-    return groupedPoints;
+    return groupedPoints
   };
 
-  const groupedPoints = groupPointsByUser(pointsTest);  
+  const handleZoomLevelChange = () => {
+    if (ourMap) {
+      ourMap.setZoom(11)
+    }
+  };
+
+
 
   return (
     <Map ref={mapRef} id="map" style={{ height: '750px' }} center={[latCenter, lonCenter]} zoom={16} >
@@ -121,11 +182,11 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
       {rectangleBounds && <Rectangle bounds={rectangleBounds} />}
-      {pointsTest.length > 0 && !showMedianUsers && pointsTest.length < 5000 &&
+      {pointsTest?.length > 0 && showPoints && pointsTest?.length < 5000 &&
         pointsTest.map((point) => (
           <Marker
             key={point.point_id}
-            position={[point.longitude, point.latitude]}
+            position={[point.latitude, point.longitude]}
             icon={point.metadata === 'Occupied Taxi' ? greenIcon : blueIcon}
           >
             <Popup>
@@ -147,8 +208,8 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
           return (
             <Marker
               key={user.username}
-              position={[user.medianlongitude, user.medianlatitude]}
-              icon={blueIcon}
+              position={[user.medianlatitude, user.medianlongitude]}
+              icon={redIcon}
             >
               <Popup>
                 <strong>Username:</strong> {user.username}
@@ -168,7 +229,7 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
         <HeatmapLayer 
           fitBoundsOnUpdate 
           fitBoundsOnLoad  
-          points={pointsTest.map((point)=>[point.longitude, point.latitude])} 
+          points={pointsTest.map((point)=>[point.latitude, point.longitude])} 
           longitudeExtractor={m => m[1]}
           latitudeExtractor={m => m[0]}
           intensityExtractor={m => parseFloat(m[2]) || 1}

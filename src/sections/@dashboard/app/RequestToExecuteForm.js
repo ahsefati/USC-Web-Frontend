@@ -75,7 +75,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                 <Typography variant="subtitle2">
                   {vars.varTitle}
                 </Typography>
-                {vars.type==="normal_input"?
+                {vars.type==="normal_input"&&
                   <Input
                     fullWidth
                     value={formData[vars.varCode]}
@@ -95,8 +95,8 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                     }
                     placeholder={vars.varTitle}
                   />
-                  :
-                  vars.type==="datetime_input"?
+                }
+                { vars.type==="datetime_input" &&
                   <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-US">
                     <DateTimePicker
                       value={formData[vars.varCode] ? new Date(formData[vars.varCode] * 1000) : null}
@@ -115,11 +115,49 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                       }
                     />
                   </LocalizationProvider>
-                  :
-                  vars.type==="area_input"?
+                }
+                {vars.type==="area_input" &&
                   <textarea style={{height:'350px', width:'100%'}}/>
-                  :
-                  'Nothing found. Contact me: ahsefati1998@gmail.com'
+                }
+                {vars.type==="minmax_normal_input" && 
+                  <Stack direction={'row'} spacing={3}>
+                    <Input
+                      value={formData[`${vars.varCode}_min`]}
+                      onChange={(e) =>
+                        {
+                          if (e.target.value!==''){
+                            setFormData({
+                              ...formData,
+                              [`${vars.varCode}_min`]: e.target.value,
+                            })
+                          }else{
+                            const updatedFormData = { ...formData };
+                            delete updatedFormData[`${vars.varCode}_min`];
+                            setFormData(updatedFormData);
+                          }
+                        }
+                      }
+                      placeholder={`Min ${vars.varTitle.split(' ')[0]}`}
+                    />
+                    <Input
+                      value={formData[`${vars.varCode}_max`]}
+                      onChange={(e) =>
+                        {
+                          if (e.target.value!==''){
+                            setFormData({
+                              ...formData,
+                              [`${vars.varCode}_max`]: e.target.value,
+                            })
+                          }else{
+                            const updatedFormData = { ...formData };
+                            delete updatedFormData[`${vars.varCode}_max`];
+                            setFormData(updatedFormData);
+                          }
+                        }
+                      }
+                      placeholder={`Max ${vars.varTitle.split(' ')[0]}`}
+                    />
+                  </Stack>
                 }
               </div>
             )

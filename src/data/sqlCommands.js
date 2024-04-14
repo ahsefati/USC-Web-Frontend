@@ -39,7 +39,12 @@ const sqlCommands = [
                 "varTitle": "Username",
                 "varCode": "username",
                 "type": "normal_input"
-            }
+            },
+            // {
+            //     "varTitle": "Points per User",
+            //     "varCode": "points_user",
+            //     "type": "minmax_normal_input"
+            // }
         ]
     },
     {

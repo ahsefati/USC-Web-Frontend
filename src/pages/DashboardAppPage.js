@@ -2,11 +2,13 @@ import { Helmet } from 'react-helmet-async';
 import 'chart.js/auto';
 import 'moment';
 import 'chartjs-adapter-moment';
+import useScreenshot from 'use-screenshot-hook';
 
 // @mui
 import { Grid, Container, Stack, Button, Checkbox, FormControlLabel} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Needed Sections
 import UserNotLoggedIn from '../sections/@dashboard/user/UserNotLoggedInMsg';
@@ -23,14 +25,19 @@ import { getAllSources, getPoints } from '../api/actions/points';
 
 import Iconify from '../components/iconify';
 
+
 export default function DashboardAppPage() {
-  
+  const mapRef = useRef();
+  console.log("MAP REF: ")
+  console.log(mapRef.current)
+  const { image, takeScreenshot } = useScreenshot(mapRef);
   const user = JSON.parse(localStorage.getItem('profile'))
   const [sources, setSources] = useState([])
   const [selectedSource, setSelectedSource] = useState(-1)
-  const [sqlCommand, setSqlCommand] = useState(-1)
+  const [sqlCommand, setSqlCommand] = useState(0)
   const [pointsTest, setPointsTest] = useState([])
   const [userStats, setUserStats] = useState([])
+  const [showPoints, setShowPoints] = useState(true)
   const [showMedianUsers, setShowMedianUsers] = useState(false)
   const [showGeneralHeatmap, setShowGeneralHeatmap] = useState(false)
   const [generalStats, setGeneralStats] = useState()
@@ -53,9 +60,9 @@ export default function DashboardAppPage() {
     
     const meanLatitude = sumLatitude / pointsTest.length;
     const meanLongitude = sumLongitude / pointsTest.length;
-    setLatCenter(meanLongitude)
-    setLonCenter(meanLatitude)
-    return [meanLongitude, meanLatitude]
+    setLatCenter(meanLatitude)
+    setLonCenter(meanLongitude)
+    return [meanLatitude, meanLongitude]
   }
 
   useEffect(()=>{
@@ -68,12 +75,15 @@ export default function DashboardAppPage() {
     }
   },[latCenter, lonCenter, sqlCommand, selectedSource])
 
+  useEffect(()=>{
+  }, [mapRef])
+
   const handleGetPoints = async () => {
     setExecuteLoading(true)
     const data = await getPoints(formData)
+    setGeneralStats(data.general_stats)
     setPointsTest(data.points)
     setUserStats(data.user_stats)
-    setGeneralStats(data.general_stats)
     setExecuteLoading(false)
   }
 
@@ -84,7 +94,6 @@ export default function DashboardAppPage() {
 
   const handleResultMode = (id) => {
     setResultMode(id)
-
   }
 
   useEffect(()=>{
@@ -94,6 +103,15 @@ export default function DashboardAppPage() {
     handleGetSources()
   }, [pointsTest])
 
+
+  const handleDownloadImage = async () => {
+    takeScreenshot(mapRef.current).then(image=>{
+      const a = document.createElement('a');
+      a.href = image;
+      a.download = 'screenshot.png';
+      a.click();
+    })
+  };
 
   return (
     <>
@@ -113,13 +131,23 @@ export default function DashboardAppPage() {
               </Stack>
               {resultMode===0 &&
               <Stack direction={"row"} spacing={1} sx={{mb:1}}>
-                  <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
-                  <FormControlLabel control={<Checkbox checked={showGeneralHeatmap} onClick={(e)=>setShowGeneralHeatmap(e.target.checked)}/>} label="Show Heat Map?"/>
+                  <Grid container justifyContent={'space-between'}>
+                    <Grid item>  
+                      <FormControlLabel control={<Checkbox checked={showPoints} onClick={(e)=>setShowPoints(e.target.checked)}/>} label="Show Points?"/>
+                      <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
+                      <FormControlLabel control={<Checkbox checked={showGeneralHeatmap} onClick={(e)=>setShowGeneralHeatmap(e.target.checked)}/>} label="Show Heat Map?"/>
+                    </Grid> 
+                    <Grid item>
+                      <LoadingButton variant='outlined' onClick={handleDownloadImage}>Save Map</LoadingButton>
+                    </Grid> 
+                  </Grid>
               </Stack>
               }
-              {resultMode===0 && 
-                <ResultMap userStats={userStats} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
-              }
+              <div ref={mapRef}>
+                {resultMode===0 && 
+                  <ResultMap generalStats={generalStats} userStats={userStats} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                }
+              </div>
               {resultMode===1 &&
                 <ResultTable pointsTest={pointsTest}/>
               }
