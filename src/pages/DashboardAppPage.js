@@ -28,8 +28,6 @@ import Iconify from '../components/iconify';
 
 export default function DashboardAppPage() {
   const mapRef = useRef();
-  console.log("MAP REF: ")
-  console.log(mapRef.current)
   const { image, takeScreenshot } = useScreenshot(mapRef);
   const user = JSON.parse(localStorage.getItem('profile'))
   const [sources, setSources] = useState([])
@@ -46,7 +44,7 @@ export default function DashboardAppPage() {
   const [lonCenter, setLonCenter] = useState(-122.34)
 
   // Result Mode
-  const [resultMode, setResultMode] = useState(1)
+  const [resultMode, setResultMode] = useState(0)
   
   // The inputs for different Points APIs
   const [formData, setFormData] = useState({})

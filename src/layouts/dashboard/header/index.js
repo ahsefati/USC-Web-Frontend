@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography, Button, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import MenuIcon from '@mui/icons-material/MoreVert';
-import { Link } from 'react-router-dom'; // If using react-router-dom
+import { Link, useLocation } from 'react-router-dom'; // If using react-router-dom
 
 import Logo from '../../../components/logo';
 // utils
@@ -50,24 +52,20 @@ export default function Header({ onOpenNav }) {
   let user;
   if (localStorage.getItem('profile')){
     user = JSON.parse(localStorage.getItem('profile'))
-    // user.result.avatar = `/assets/images/avatars/${user?.result?.avatar}` || "/assets/images/avatars/avatar_13.jpg"
   }else{
     user = false
   }
 
+  const location = useLocation()
+  const [currentPath, setCurrentPath] = useState('')
+  useEffect(()=>{
+    console.log(location.pathname)
+    setCurrentPath(location.pathname)
+  }, location)
+
   return (
     <StyledRoot>
       <StyledToolbar>
-        {/* <IconButton
-          onClick={onOpenNav}
-          sx={{
-            mr: 1,
-            color: 'text.primary',
-            display: { lg: 'none' },
-          }}
-        >
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton> */}
         <Box sx={{display:{xs:'none', lg:'block'}}}>
           <Stack direction={'row'}>
               <Logo sx={{marginTop:'10px', height:'55px'}}/>
@@ -91,9 +89,38 @@ export default function Header({ onOpenNav }) {
             sm: 0.5,
           }}
         >
-          <LanguagePopover />
+          <Link to={'/dashboard/landing'}>
+            <LoadingButton size='small' 
+              onClick={()=>setCurrentPath('/dashboard/landing')} 
+              variant={currentPath.includes('/dashboard/landing')?'contained':'outlined'}
+            >
+              Home
+            </LoadingButton>
+          </Link>
+          <Link to={'/dashboard/generalanalysis'}>
+            <LoadingButton size='small' onClick={()=>setCurrentPath('/dashboard/generalanalysis')} variant={currentPath.includes('/dashboard/generalanalysis')?'contained':'outlined'}>
+              General Analysis
+            </LoadingButton>
+          </Link>
+          <Link to={'/dashboard/dbquery'}>
+            <LoadingButton size='small' 
+              onClick={()=>setCurrentPath('/dashboard/dbquery')} 
+              variant={currentPath.includes('/dashboard/dbquery')?'contained':'outlined'}
+            >
+              Query
+            </LoadingButton>
+          </Link>
+          <Link to={'/dashboard/uplodadataset'}>
+            <LoadingButton size='small' 
+              onClick={()=>setCurrentPath('/dashboard/uplodadataset')}
+              variant={currentPath.includes('/dashboard/uplodadataset')?'contained':'outlined'}
+            >
+              Upload Dataset
+            </LoadingButton>
+          </Link>
+          <LanguagePopover/>
           {user &&
-            <NotificationsPopover />
+            <NotificationsPopover/>
           }
           <AccountPopover />
         </Stack>

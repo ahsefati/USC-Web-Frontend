@@ -119,7 +119,7 @@ const palette = {
     paper: '#fff',
     default: GREY[200],
     neutral: GREY[200],
-    header: '#ffcc00'
+    header: '#eeeeee'
   },
   action: {
     active: GREY[600],

@@ -52,7 +52,7 @@ export default function LanguagePopover() {
 
 
   return (
-    <>
+    <Box sx={{display:{xs:'none', lg:'block'}}}>
       <IconButton
         onClick={handleOpen}
         sx={{
@@ -96,6 +96,6 @@ export default function LanguagePopover() {
           ))}
         </Stack>
       </Popover>
-    </>
+    </Box>
   );
 }

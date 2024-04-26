@@ -18,3 +18,12 @@ export const getAllSources = async () => {
         return error
     }
 }
+
+export const getAllUsers = async () => {
+    try {
+        const {data} = await api.getAllUsers()
+        return data        
+    } catch (error) {
+        return error
+    }
+}

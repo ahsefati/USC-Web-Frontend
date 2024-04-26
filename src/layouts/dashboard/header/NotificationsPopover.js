@@ -92,7 +92,7 @@ export default function NotificationsPopover() {
   };
 
   return (
-    <>
+    <Box sx={{display:{xs:'none', lg:'block'}}}>
       <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40,}}>
         <Badge badgeContent={totalUnRead} color="error">
           <Iconify style={{width:'40px', height:'25px'}} icon="eva:bell-fill" />
@@ -178,7 +178,7 @@ export default function NotificationsPopover() {
         </>
         }
       </Popover>
-    </>
+    </Box>
   );
 }
 

@@ -7,6 +7,7 @@ import {LocalizationProvider} from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LoadingButton } from '@mui/lab';
 import sqlCommands from '../../../data/sqlCommands';
+import statePolygons from '../../../data/statePolygons';
 
 import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
@@ -75,6 +76,31 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                 <Typography variant="subtitle2">
                   {vars.varTitle}
                 </Typography>
+                {vars.type==="select_input" && 
+                  <Select
+                    fullWidth
+                    labelId={`${vars.varTitle}`}
+                    id={`${vars.varTitle}`}
+                    value={formData[vars.varCode] || -1}
+                    label={`${vars.varTitle}`}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        [vars.varCode]: e.target.value,
+                      })
+                    }}
+                  >
+                    <MenuItem value={-1}>ALL</MenuItem>
+                    {statePolygons.map(polygonJSON => {
+                      return (
+                        <MenuItem key={polygonJSON.properties.name} value={polygonJSON.geometry}>{polygonJSON.properties.name}</MenuItem>
+                      )
+                    })
+        
+                    }
+                  </Select>
+
+                }
                 {vars.type==="normal_input"&&
                   <Input
                     fullWidth

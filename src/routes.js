@@ -15,11 +15,13 @@ import ForgotPassPage from './pages/ForgotPassPage';
 // Main Pages
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
+import GeneralAnalysisPage from './pages/GeneralAnalysisPage';
 import SavedTools from './pages/SavedTools';
 import UserProfilePage from './pages/UserProfilePage';
 
 // Tools
 import CoinDetailsPage from './pages/Tools/CoinDetailsPage';
+import GeneralInfoPage from './pages/GeneralAnalysisPages/GeneralInfoPage';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +31,13 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
+        { element: <Navigate to="/dashboard/generalanalysis" />, index: true },
+        { 
+          path: 'generalanalysis', 
+          element: <GeneralAnalysisPage />,
+        },
+        {path: 'generalanalysis/generalinfo', element: <GeneralInfoPage/>},
+        { path: 'dbquery', element: <DashboardAppPage /> },
         { path: 'savedtools', element: <SavedTools /> },
         { path: 'userprofile', element: <UserProfilePage /> },
         { path: 'coindetails/:id', element: <CoinDetailsPage /> },
@@ -51,7 +58,7 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
+        { element: <Navigate to="/dashboard/generalanalysis" />, index: true },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

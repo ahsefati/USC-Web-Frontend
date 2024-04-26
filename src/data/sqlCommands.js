@@ -6,6 +6,11 @@ const sqlCommands = [
         "endpoint": "/points/inaboxwithfilter",
         "variables": [
             {
+                "varTitle": "Select a State",
+                "varCode": "state_polygon",
+                "type": "select_input"
+            },
+            {
                 "varTitle": "Min. Latitude",
                 "varCode": "min_lat",
                 "type": "normal_input"
