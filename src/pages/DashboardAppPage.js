@@ -35,9 +35,12 @@ export default function DashboardAppPage() {
   const [sqlCommand, setSqlCommand] = useState(0)
   const [pointsTest, setPointsTest] = useState([])
   const [userStats, setUserStats] = useState([])
+
   const [showPoints, setShowPoints] = useState(true)
   const [showMedianUsers, setShowMedianUsers] = useState(false)
   const [showGeneralHeatmap, setShowGeneralHeatmap] = useState(false)
+  const [showTrajectoryLines, setShowTrajectoryLines] = useState(false)
+
   const [generalStats, setGeneralStats] = useState()
   const [executeLoading, setExecuteLoading] = useState(false)
   const [latCenter, setLatCenter] = useState(37.94)
@@ -134,6 +137,7 @@ export default function DashboardAppPage() {
                       <FormControlLabel control={<Checkbox checked={showPoints} onClick={(e)=>setShowPoints(e.target.checked)}/>} label="Show Points?"/>
                       <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
                       <FormControlLabel control={<Checkbox checked={showGeneralHeatmap} onClick={(e)=>setShowGeneralHeatmap(e.target.checked)}/>} label="Show Heat Map?"/>
+                      <FormControlLabel control={<Checkbox checked={showTrajectoryLines} onClick={(e)=>setShowTrajectoryLines(e.target.checked)}/>} label="Show Trajectories?"/>
                     </Grid> 
                     <Grid item>
                       <LoadingButton variant='outlined' onClick={handleDownloadImage}>Save Map</LoadingButton>
@@ -143,7 +147,7 @@ export default function DashboardAppPage() {
               }
               <div ref={mapRef}>
                 {resultMode===0 && 
-                  <ResultMap generalStats={generalStats} userStats={userStats} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                  <ResultMap generalStats={generalStats} userStats={userStats} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} showTrajectoryLines={showTrajectoryLines} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
                 }
               </div>
               {resultMode===1 &&

@@ -27,3 +27,12 @@ export const getAllUsers = async () => {
         return error
     }
 }
+
+export const getHistogramInfo = async (formdata) => {
+    try {
+        const {data} = await api.getHistogramInfo(formdata)
+        return data
+    } catch (error) {
+        return error
+    }
+}

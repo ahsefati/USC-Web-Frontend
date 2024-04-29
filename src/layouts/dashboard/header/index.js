@@ -61,7 +61,7 @@ export default function Header({ onOpenNav }) {
   useEffect(()=>{
     console.log(location.pathname)
     setCurrentPath(location.pathname)
-  }, location)
+  }, [location])
 
   return (
     <StyledRoot>

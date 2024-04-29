@@ -47,6 +47,7 @@ export const sellCoin = (formData) => API.patch(`/tools/sellcoin`, formData)
 
 // Points
 export const getPoints = (formData) => API.post(formData?.endpoint, formData)
+export const getHistogramInfo = (formData) => API.post(`/points/gethistograminfo`, formData)
 export const getAllSources = () => API.get(`/points/allsources`)
 export const getAllUsers = () => API.get(`/points/allusers`)
 

@@ -22,6 +22,7 @@ import UserProfilePage from './pages/UserProfilePage';
 // Tools
 import CoinDetailsPage from './pages/Tools/CoinDetailsPage';
 import GeneralInfoPage from './pages/GeneralAnalysisPages/GeneralInfoPage';
+import GenerateHistogramPage from './pages/GeneralAnalysisPages/GenerateHistogramPage';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,7 @@ export default function Router() {
           element: <GeneralAnalysisPage />,
         },
         {path: 'generalanalysis/generalinfo', element: <GeneralInfoPage/>},
+        {path: 'generalanalysis/generatehistogram', element: <GenerateHistogramPage/>},
         { path: 'dbquery', element: <DashboardAppPage /> },
         { path: 'savedtools', element: <SavedTools /> },
         { path: 'userprofile', element: <UserProfilePage /> },

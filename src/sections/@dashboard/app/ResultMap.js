@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Map, TileLayer, Marker, Popup, Rectangle, Polyline  } from 'react-leaflet';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
-import L from 'leaflet';
+import L, { polygon } from 'leaflet';
 import 'leaflet-draw';
 
 const greenIcon = new L.Icon({
@@ -33,10 +33,13 @@ const removeAllControls = (map) => {
 };
 
 
-const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, generalStats}) => {
+const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, showTrajectoryLines, generalStats}) => {
   const [ourMap, setOurMap] = useState()
   const [rectangleBounds, setRectangleBounds] = useState(null)
   const mapRef = useRef()
+
+  const [trajectoryLayers, setTrajectoryLayers] = useState([])
+  const [trajectoryMarkers, setTrajectoryMarkers] = useState([])
 
   useEffect(()=>{
     const map = mapRef.current.leafletElement
@@ -147,15 +150,27 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
         })
       }
     });
+
   },[generalStats])
 
   useEffect(()=>{
     if (ourMap){
+      addTrajectoryLines()
       ourMap.setView([latCenter, lonCenter])
     }
-  }, [latCenter, lonCenter, formData])
+  }, [latCenter, lonCenter, formData, ourMap])
 
-  // Function to group points by username
+  // TRAJECTORY LINES:
+    // We need to have different colors for trajectory lines for each user!
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+    // Function to group points by username
   const groupPointsByUser = (points) => {
     const groupedPoints = {}
     points.forEach((point) => {
@@ -167,13 +182,101 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
     return groupedPoints
   };
 
-  const handleZoomLevelChange = () => {
-    if (ourMap) {
-      ourMap.setZoom(11)
+    // Function to sort points based on the datetime for each user
+    // Afterward, it creates trajectories
+    // And then, it adds it to the map
+  const createTrajectoriesAndAddToMap = (groupedPoints) => {
+    Object.values(groupedPoints).forEach((userPoints, index) => {
+      const color = getRandomColor();
+    
+      for (let i = 0; i < userPoints.length - 1; i++) {
+        const startPoint = userPoints[i];
+        const endPoint = userPoints[i + 1];
+        
+        // Calculate trajectory line coordinates
+        const trajectoryLine = [
+          [startPoint.latitude, startPoint.longitude], // Start point coordinates
+          [endPoint.latitude, endPoint.longitude]      // End point coordinates
+        ];
+    
+        const polyline = L.polyline(trajectoryLine, { color, weight: 5 }).addTo(ourMap); // Increase weight for bolder lines
+        trajectoryLayers.push(polyline)
+        // Add directional arrow to the end of the line
+        if (i === 0) {
+          addArrowhead(polyline, endPoint.latitude, endPoint.longitude, color, 'rectangle'); // First arrowhead as rectangle
+        } else if (i === userPoints.length - 2) {
+          addArrowhead(polyline, endPoint.latitude, endPoint.longitude, color, 'circle'); // Last arrowhead as circle
+        } else {
+          addArrowhead(polyline, endPoint.latitude, endPoint.longitude, color, 'arrow'); // Other arrowheads as arrows
+        }
+      }
+    });
+    
+  }
+
+    // Function to add an arrowhead to the end of a polyline
+  const addArrowhead = (polyline, lat, lng, color, type) => {
+    let iconHtml;
+    let iconSize;
+    let iconAnchor;
+
+    // Define different shapes for arrowheads
+    if (type === 'rectangle') {
+      iconHtml = '<div style="width: 30px; height: 20px; background-color: ' + color + ';"></div>';
+      iconSize = [15, 10];
+      iconAnchor = [7.5, 5];
+    } else if (type === 'circle') {
+      iconHtml = '<svg width="20" height="20"><circle cx="10" cy="10" r="10" fill="' + color + '"/></svg>';
+      iconSize = [10, 10];
+      iconAnchor = [5, 5];
+    } else {
+      // Default arrowhead shape
+      const angle = Math.atan2(lat - polyline.getLatLngs()[polyline.getLatLngs().length - 2].lat, lng - polyline.getLatLngs()[polyline.getLatLngs().length - 2].lng) * 180 / Math.PI;
+      iconHtml = '<div style="width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 15px solid ' + color + '; transform: rotate(' + angle + 'deg);"></div>';
+      iconSize = [10, 10];
+      iconAnchor = [5, 5];
     }
-  };
 
+    // Create marker with custom icon
+    const trajectoryMarker = L.marker([lat, lng], {
+      icon: L.divIcon({
+        className: 'arrowhead-icon',
+        html: iconHtml,
+        iconSize: iconSize,
+        iconAnchor: iconAnchor,
+      })
+    }).addTo(ourMap);
 
+    trajectoryMarkers.push(trajectoryMarker)
+
+  }
+    
+  const addTrajectoryLines = () => {
+    if (pointsTest.length > 0 && ourMap && showTrajectoryLines) {
+      const groupedPoints = groupPointsByUser(pointsTest)
+      createTrajectoriesAndAddToMap(groupedPoints)
+    }
+  }
+
+  useEffect(()=>{
+    if (showTrajectoryLines){
+      addTrajectoryLines()
+    }else{
+      removeTrajectoryLines()
+    }
+  }, [showTrajectoryLines])
+
+  const removeTrajectoryLines = () => {    
+    trajectoryLayers.forEach(trajectoryLayer => {
+      ourMap.removeLayer(trajectoryLayer);
+    });
+    setTrajectoryLayers([])
+
+    trajectoryMarkers.forEach(trajectoryMarker => {
+      ourMap.removeLayer(trajectoryMarker);
+    });
+    setTrajectoryMarkers([])
+  }
 
   return (
     <Map ref={mapRef} id="map" style={{ height: '750px' }} center={[latCenter, lonCenter]} zoom={16} >

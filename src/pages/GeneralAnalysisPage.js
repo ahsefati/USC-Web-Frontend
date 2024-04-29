@@ -37,7 +37,7 @@ export default function GeneralAnalysisPage() {
               </Link>
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <Link to={'/generatehistogram'} style={{textDecoration:'none'}}>
+              <Link to={'/dashboard/generalanalysis/generatehistogram'} style={{textDecoration:'none'}}>
                 <MyPaper 
                   icon="material-symbols:bar-chart-4-bars-rounded" 
                   text="Generate Histograms" 

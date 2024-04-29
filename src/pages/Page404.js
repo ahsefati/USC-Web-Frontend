@@ -28,23 +28,19 @@ export default function Page404() {
       <Container>
         <StyledContent sx={{ textAlign: 'center', alignItems: 'center' }}>
 
-          <Box onClick={()=>{window.location="https://USC-WEB.netlify.app"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', cursor:'pointer' }} component={"img"} src="/assets/Kooch_main_logo.png"/>
+          <Box onClick={()=>{window.location="https://USC-WEB.netlify.app"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', cursor:'pointer' }} component={"img"} src="/assets/usc-shield.webp"/>
           <Typography variant="h3" paragraph>
-            Sorry, page not found!
+            Sorry! Page not found!
           </Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your
-            spelling.
+            We couldn’t find the page you’re looking for. Make sure to check your
+            spelling. If you spelled it right, it's our fault :)
+            <br/> <br/>
+            Contact me via email: ahsefati1998@gmail.com
           </Typography>
 
-          <Box
-            component="img"
-            src="/assets/illustrations/illustration_404.svg"
-            sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
-          />
-
-          <Button to="/" size="large" variant="contained" component={RouterLink}>
+          <Button sx={{my:{xs:2, sm:4}}} to="/" size="large" variant="contained" component={RouterLink}>
             Go to Home
           </Button>
         </StyledContent>
