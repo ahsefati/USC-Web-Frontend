@@ -31,8 +31,8 @@ export default function GeneralAnalysisPage() {
               <Link to={'/dashboard/generalanalysis/generalinfo'} style={{textDecoration:'none'}}>
                 <MyPaper 
                   icon="material-symbols:info-outline" 
-                  text="General Info" 
-                  description="Get users and sources full information"
+                  text="Sources & Users" 
+                  description="Get sources and users general information"
                 />
               </Link>
             </Grid>

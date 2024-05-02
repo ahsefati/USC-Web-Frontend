@@ -28,22 +28,22 @@ const TABLE_HEAD_USERS = [
   { id: 'username', label: 'Username', alignRight: false },
   { id: 'name', label: 'Source Name', alignRight: false },
   { id: 'metadata', label: 'Metadata', alignRight: false },
-  { id: 'speed_90th_percentile_mps', label: 'Speed (90 Percentile)', alignRight: false },
-  { id: 'speed_95th_percentile_mps', label:'Speed (95 Percentile)', alignRight:false},
-  { id: 'speed_99th_percentile_mps', label: 'Speed (99 Percentile)', alignRight: false },
-  { id: 'speed_99_5th_percentile_mps', label: 'Speed (99.5 Percentile)', alignRight: false },
-  { id: 'speed_99_9th_percentile_mps', label: 'Speed (99.9 Percentile)', alignRight: false },
+  { id: 'speed_90th_percentile_mps', label: '90th Speed (m/s)', alignRight: false },
+  { id: 'speed_95th_percentile_mps', label:'95th Speed (m/s)', alignRight:false},
+  { id: 'speed_99th_percentile_mps', label: '99th Speed (m/s)', alignRight: false },
+  { id: 'speed_99_5th_percentile_mps', label: '99.5th Speed (m/s)', alignRight: false },
+  { id: 'speed_99_9th_percentile_mps', label: '99.9th Speed (m/s)', alignRight: false },
 ];
 
 const TABLE_HEAD_SOURCES = [
   { id: 'sourceId', label: 'Source ID', alignRight: false },
   { id: 'name', label: 'Source Name', alignRight: false },
   { id: 'link', label: 'Source Reference', alignRight: false },
-  { id: 'speed_90th_percentile_mps', label: 'Speed (90 Percentile)', alignRight: false },
-  { id: 'speed_95th_percentile_mps', label:'Speed (95 Percentile)', alignRight:false},
-  { id: 'speed_99th_percentile_mps', label: 'Speed (99 Percentile)', alignRight: false },
-  { id: 'speed_99_5th_percentile_mps', label: 'Speed (99.5 Percentile)', alignRight: false },
-  { id: 'speed_99_9th_percentile_mps', label: 'Speed (99.9 Percentile)', alignRight: false },
+  { id: 'speed_90th_percentile_mps', label: '90th Speed (m/s)', alignRight: false },
+  { id: 'speed_95th_percentile_mps', label:'95th Speed (m/s)', alignRight:false},
+  { id: 'speed_99th_percentile_mps', label: '99th Speed (m/s)', alignRight: false },
+  { id: 'speed_99_5th_percentile_mps', label: '99.5th Speed (m/s)', alignRight: false },
+  { id: 'speed_99_9th_percentile_mps', label: '99.9th Speed (m/s)', alignRight: false },
 ];
 
 // StyledTable
@@ -183,7 +183,7 @@ export default function GeneralInfoPage() {
             <Iconify icon={'ic:round-arrow-back'} width={24} height={24} style={{color:'black', marginRight:'16px'}}/>
           </Link>
           <Typography variant="h4" gutterBottom>
-            General Information
+            Sources & Users
           </Typography>
         </Stack>
         <Typography variant="body2" gutterBottom sx={{mb:2}}>
@@ -239,7 +239,7 @@ export default function GeneralInfoPage() {
                                 <StyledTableCell  component="th" scope="row" padding="normal">
                                   <Stack direction="row" alignItems="center" spacing={2}>
                                     <Typography variant="subtitle2" noWrap>
-                                      {metadata || link}
+                                      {link? <a target='_blank' href={link}>Explore & Download</a> : metadata}
                                     </Typography>
                                   </Stack>
                                 </StyledTableCell >

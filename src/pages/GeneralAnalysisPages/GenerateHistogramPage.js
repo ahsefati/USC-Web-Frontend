@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Chart from 'chart.js/auto';
 
 // @mui
-import { Grid, Input, Container, Stack, Typography, FormControl, Select, MenuItem, InputLabel, Button, Checkbox, FormControlLabel} from '@mui/material';
+import { Grid, Input, Container, Stack, Typography, FormControl, Select, MenuItem, InputLabel, Button, Checkbox, FormControlLabel, Tooltip} from '@mui/material';
 import { Link } from 'react-router-dom';
 
 // api
@@ -45,6 +45,9 @@ export default function GenerateHistogramPage() {
     }
 
     const data = await getHistogramInfo(formData)
+    data.sort((a,b) => {
+      return a.histo_value - b.histo_value
+    })
     setHistogramInfo(data)
     const dataExcludeZero = data.filter(item => item.histo_value!==0)
     setHistogramInfoExludeZero(dataExcludeZero)
@@ -167,8 +170,8 @@ export default function GenerateHistogramPage() {
           Here, you can generate different histogram figures based on various metrics such as time and distance.
         </Typography>
 
-        <Stack direction={'row'} spacing={3} alignItems={'center'}>
-          <FormControl style={{marginTop:'12px', width:'180px'}}>
+        <Stack direction={'row'} spacing={3} alignItems={'baseline'} overflow={"auto"}>
+          <FormControl style={{marginTop:'12px', minWidth:'180px'}}>
             <InputLabel id="Histogram Mode">Mode</InputLabel>
             <Select
               labelId="Histogram Mode"
@@ -182,11 +185,11 @@ export default function GenerateHistogramPage() {
                 })
               }}
             >
-              <MenuItem value={'time'}>Time</MenuItem>
-              <MenuItem value={'distance'}>Distance</MenuItem>
+              <MenuItem value={'time'}>Time Gap</MenuItem>
+              <MenuItem value={'distance'}>Distance Gap</MenuItem>
             </Select>
           </FormControl>
-          <FormControl style={{marginTop:'12px', width:'180px'}}>
+          <FormControl style={{marginTop:'12px', minWidth:'180px'}}>
             <InputLabel id="Select Source to Explore">Dataset</InputLabel>
             <Select
               labelId="Select Source to Explore"
@@ -211,6 +214,7 @@ export default function GenerateHistogramPage() {
             </Select>
           </FormControl>
           <Input
+            sx={{width:"120px"}}
             value={formData['username']}
             onChange={(e) =>
               {
@@ -228,33 +232,43 @@ export default function GenerateHistogramPage() {
             }
             placeholder={'Username'}
           />
-          <Input
-            value={formData['limit']}
-            onChange={(e) =>
-              {
-                setFormData({
-                  ...formData,
-                  ['limit']: e.target.value,
-                })
+          <Stack direction={"column"}>
+            <Tooltip title="Number of top results to be shown on the chart.">
+              <Input
+                sx={{minWidth:"210px"}}
+                value={formData['limit']}
+                onChange={(e) =>
+                  {
+                    setFormData({
+                      ...formData,
+                      ['limit']: e.target.value,
+                    })
+                  }
+                }
+                placeholder={'Number of Bins (default: 5)'}
+                
+              />
+            </Tooltip>
+          </Stack>
+          <Stack direction={"column"}>
+            <Input
+              sx={{minWidth:"180px"}}
+              value={formData['precision']}
+              onChange={(e) =>
+                {
+                  setFormData({
+                    ...formData,
+                    ['precision']: e.target.value,
+                  })
+                }
               }
-            }
-            placeholder={'Limit (default: 5)'}
-          />
-          <Input
-            value={formData['precision']}
-            onChange={(e) =>
-              {
-                setFormData({
-                  ...formData,
-                  ['precision']: e.target.value,
-                })
-              }
-            }
-            placeholder={'Precision (default: 5)'}
-          />
-          <LoadingButton loading={loading} onClick={_getInfo} variant='contained' color='primary' size='large'>Generate</LoadingButton>
+              placeholder={'Bin Interval (default: 5)'}
+            />
+            <Typography variant='body2'>{formData['mode']==="time" ? 'Unit: Seconds' : 'Unit: Meters'}</Typography>
+          </Stack>
+          <LoadingButton sx={{minWidth:"180px"}} loading={loading} onClick={_getInfo} variant='contained' color='primary' size='large'>Generate</LoadingButton>
           {histogramInfo.length > 0 &&
-            <Button onClick={downloadChart}>Download (PNG)</Button>
+            <Button sx={{minWidth:"180px"}} onClick={downloadChart}>Download (PNG)</Button>
           }
         </Stack>
         {histogramInfo.length > 0 && 
