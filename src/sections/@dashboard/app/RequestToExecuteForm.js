@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
-import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, Stack, Input, Button} from '@mui/material';
+import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, Stack, Input, Button, FormControlLabel, Checkbox} from '@mui/material';
 import {DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -68,7 +68,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
           </Select>
         </FormControl>
       </Stack>
-      <Stack direction="column" alignItems="center">
+      <Stack direction={"column"} spacing={2}>
         {sqlCommand!==-1&&
           sqlCommands.filter(command=>command.id===sqlCommand)[0].variables.map(vars => {
             return (
@@ -99,11 +99,10 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
         
                     }
                   </Select>
-
                 }
-                {vars.type==="normal_input"&&
+                {vars.type==="normal_input" &&
                   <Input
-                    fullWidth
+                    fullwidth
                     value={formData[vars.varCode]}
                     onChange={(e) =>
                       {

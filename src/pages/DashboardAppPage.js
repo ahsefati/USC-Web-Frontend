@@ -5,7 +5,7 @@ import 'chartjs-adapter-moment';
 import useScreenshot from 'use-screenshot-hook';
 
 // @mui
-import { Grid, Container, Stack, Button, Checkbox, FormControlLabel} from '@mui/material';
+import { Grid, Container, Stack, Button, Checkbox, FormControlLabel, Input} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { useEffect, useRef, useState } from 'react';
@@ -40,6 +40,9 @@ export default function DashboardAppPage() {
   const [showMedianUsers, setShowMedianUsers] = useState(false)
   const [showGeneralHeatmap, setShowGeneralHeatmap] = useState(false)
   const [showTrajectoryLines, setShowTrajectoryLines] = useState(false)
+  const [showCommonPlaces, setShowCommonPlaces] = useState(false)
+  const [detectOutliers, setDetectOutliers] = useState(false)
+  const [outlierSpeedThreshold, setOutlierSpeedThreshold] = useState(null)
 
   const [generalStats, setGeneralStats] = useState()
   const [executeLoading, setExecuteLoading] = useState(false)
@@ -138,6 +141,28 @@ export default function DashboardAppPage() {
                       <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
                       <FormControlLabel control={<Checkbox checked={showGeneralHeatmap} onClick={(e)=>setShowGeneralHeatmap(e.target.checked)}/>} label="Show Heat Map?"/>
                       <FormControlLabel control={<Checkbox checked={showTrajectoryLines} onClick={(e)=>setShowTrajectoryLines(e.target.checked)}/>} label="Show Trajectories?"/>
+                      <FormControlLabel control={<Checkbox checked={showCommonPlaces} onClick={(e)=>setShowCommonPlaces(e.target.checked)}/>} label="Show Common Places?"/>
+                      <FormControlLabel 
+                        control={
+                          <Checkbox checked={detectOutliers} 
+                          onClick={(e)=>{
+                              setDetectOutliers(e.target.checked)
+                              if (!e.target.checked){
+                                setOutlierSpeedThreshold(null)
+                              }
+                            }}
+                          />
+                        } 
+                        label="Detect Outliers?"
+                      />
+                      {detectOutliers &&
+                        <Input
+                          style={{width: "140px"}}
+                          value={outlierSpeedThreshold}
+                          onChange={(e) => setOutlierSpeedThreshold(e.target.value)}
+                          placeholder={"Speed Threshold"}
+                        />
+                      }
                     </Grid> 
                     <Grid item>
                       <LoadingButton variant='outlined' onClick={handleDownloadImage}>Save Map</LoadingButton>
@@ -147,7 +172,7 @@ export default function DashboardAppPage() {
               }
               <div ref={mapRef}>
                 {resultMode===0 && 
-                  <ResultMap generalStats={generalStats} userStats={userStats} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} showTrajectoryLines={showTrajectoryLines} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                  <ResultMap generalStats={generalStats} userStats={userStats} outlierSpeedThreshold={outlierSpeedThreshold} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} showTrajectoryLines={showTrajectoryLines} showCommonPlaces={showCommonPlaces} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
                 }
               </div>
               {resultMode===1 &&

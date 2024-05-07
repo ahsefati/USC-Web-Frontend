@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import Iconify from '../../components/iconify';
 import { getAllSources, getHistogramInfo } from 'src/api/actions/points';
 import { LoadingButton } from '@mui/lab';
+import ResultHistogram from 'src/sections/@dashboard/app/ResultHistogram';
 
 const isNumber = (n) => { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
 
@@ -29,8 +30,10 @@ export default function GenerateHistogramPage() {
   const [histogramInfo, setHistogramInfo] = useState([])
   const [histogramInfoExludeZero, setHistogramInfoExludeZero] = useState([])
   const [formData, setFormData] = useState({"mode": 'time', "limit": '', "precision": '', "sourceId": -1})
+  const [histogramInfoAll, setHistogramInfoAll] = useState([])
 
   const [loading, setLoading] = useState(false)
+  const [showMode, setShowMode] = useState(0)
 
   const _getInfo = async () => {
     setLoading(true)
@@ -45,12 +48,18 @@ export default function GenerateHistogramPage() {
     }
 
     const data = await getHistogramInfo(formData)
-    data.sort((a,b) => {
+    const limitedData = data.slice(0, parseInt(formData["limit"]))
+    
+    limitedData.sort((a,b) => {
       return a.histo_value - b.histo_value
     })
-    setHistogramInfo(data)
-    const dataExcludeZero = data.filter(item => item.histo_value!==0)
+    
+    setHistogramInfo(limitedData)
+    const dataExcludeZero = limitedData.filter(item => item.histo_value!==0)
     setHistogramInfoExludeZero(dataExcludeZero)
+
+    setHistogramInfoAll(data)
+
     setLoading(false)
 
   }
@@ -91,7 +100,7 @@ export default function GenerateHistogramPage() {
           x: {
             title: {
               display: true,
-              text: 'Time Range (Seconds)'
+              text: formData["mode"]==="time"?'Time Interval (Seconds)':'Distance Interval (Meters)'
             }
           },
           y: {
@@ -142,14 +151,27 @@ export default function GenerateHistogramPage() {
   };
 
   useEffect(()=>{
-    if (histogramInfo.length > 0) {
+    if (histogramInfo.length > 0 && showMode===0) {
       if (excludeZero){
         createChart(histogramInfoExludeZero)
       }else{
         createChart(histogramInfo)
       }
     }
-  }, [histogramInfo, excludeZero])
+  }, [histogramInfo, excludeZero, showMode, hOfChart, wOfChart])
+
+  useEffect(()=>{
+    const limitedData = histogramInfoAll.slice(0, parseInt(formData["limit"]))
+    
+    limitedData.sort((a,b) => {
+      return a.histo_value - b.histo_value
+    })
+    
+    setHistogramInfo(limitedData)
+    const dataExcludeZero = limitedData.filter(item => item.histo_value!==0)
+    setHistogramInfoExludeZero(dataExcludeZero)
+    
+  },[formData["limit"]])
 
   return (
     <>
@@ -267,33 +289,46 @@ export default function GenerateHistogramPage() {
             <Typography variant='body2'>{formData['mode']==="time" ? 'Unit: Seconds' : 'Unit: Meters'}</Typography>
           </Stack>
           <LoadingButton sx={{minWidth:"180px"}} loading={loading} onClick={_getInfo} variant='contained' color='primary' size='large'>Generate</LoadingButton>
-          {histogramInfo.length > 0 &&
-            <Button sx={{minWidth:"180px"}} onClick={downloadChart}>Download (PNG)</Button>
-          }
         </Stack>
-        {histogramInfo.length > 0 && 
-          <Stack direction={'row'} alignItems={'center'} sx={{mt:2}}>
-            <Typography variant='body' sx={{mr:1}}>Chart Height:</Typography>
-            <Input
-              sx={{mr:6, width:'60px'}}
-              value={hOfChart}
-              onChange={(e) => setHOfChart(e.target.value)}
-              placeholder={'Chart Height'}
-            />
-            <Typography variant='body' sx={{mr:1}}>Chart Width:</Typography>
-            <Input
-              sx={{mr:6, width:'60px'}}
-              value={wOfChart}
-              onChange={(e) => setWOfChart(e.target.value)}
-              placeholder={'Chart Width'}
-            />
-            <FormControlLabel control={<Checkbox checked={excludeZero} onClick={(e)=>setExcludeZero(e.target.checked)}/>} label="Exclude Zero?"/>
-          </Stack>
+        <Stack direction={'row'} spacing={1}>
+          <Button onClick={()=>setShowMode(0)} variant={showMode?'outlined':'contained'}>Chart</Button>
+          <Button onClick={()=>setShowMode(1)} variant={!showMode?'outlined':'contained'}>Table</Button>
+        </Stack>
+
+        {/* MODE == CHART */}
+        {histogramInfo.length > 0 && showMode===0 &&
+          <>
+            <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} sx={{mt:2}}>
+              <Grid item>
+                <Typography variant='body' sx={{mr:1}}>Chart Height:</Typography>
+                <Input
+                  sx={{mr:6, width:'60px'}}
+                  value={hOfChart}
+                  onChange={(e) => setHOfChart(e.target.value)}
+                  placeholder={'Chart Height'}
+                />
+                <Typography variant='body' sx={{mr:1}}>Chart Width:</Typography>
+                <Input
+                  sx={{mr:6, width:'60px'}}
+                  value={wOfChart}
+                  onChange={(e) => setWOfChart(e.target.value)}
+                  placeholder={'Chart Width'}
+                />
+                <FormControlLabel control={<Checkbox checked={excludeZero} onClick={(e)=>setExcludeZero(e.target.checked)}/>} label="Exclude Zero?"/>
+              </Grid>
+              <Grid item>
+                <Button startIcon={<Iconify icon="material-symbols:cloud-download-outline"/>} sx={{minWidth:"180px"}} variant='outlined' onClick={downloadChart}>Download (PNG)</Button>
+              </Grid>
+            </Stack>
+            {/* Show the results */}
+            <Grid container sx={{mt:4, minWidth:'100%'}} justifyContent={'center'}>
+              <canvas id="histogramChart" style={{minHeight: `${hOfChart}px`, maxHeight: `${hOfChart}px`, minWidth: `${wOfChart}px`, maxWidth: `${wOfChart}px`, backgroundColor: 'white'}}></canvas>
+            </Grid>
+          </>
         }
-        {/* Show the results */}
-        <Grid container sx={{mt:2}}>
-          <canvas id="histogramChart" width="400" height="200" style={{minHeight: `${hOfChart}px`, maxHeight: `${hOfChart}px`, minWidth: `${wOfChart}px`, maxWidth: `${wOfChart}px`, backgroundColor: 'white'}}></canvas>
-        </Grid>
+        {showMode===1 &&
+          <ResultHistogram histogramInfo={histogramInfoAll}/>
+        }
       </Container>
     </>
   );

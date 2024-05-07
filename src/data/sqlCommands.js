@@ -41,6 +41,11 @@ const sqlCommands = [
                 "type": "datetime_input"
             },
             {
+                "varTitle": "Detect Outliers",
+                "varCode": "detectOutliers",
+                "type": "checkbox_input"
+            },
+            {
                 "varTitle": "Username",
                 "varCode": "username",
                 "type": "normal_input"

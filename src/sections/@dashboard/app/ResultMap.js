@@ -28,12 +28,20 @@ const redIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
+const yellowIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
 const removeAllControls = (map) => {
   map._controlCorners.bottomleft.innerHTML = ''
 };
 
 
-const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, showTrajectoryLines, generalStats}) => {
+const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, showTrajectoryLines, showCommonPlaces, outlierSpeedThreshold, generalStats}) => {
   const [ourMap, setOurMap] = useState()
   const [rectangleBounds, setRectangleBounds] = useState(null)
   const mapRef = useRef()
@@ -285,12 +293,13 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
       {rectangleBounds && <Rectangle bounds={rectangleBounds} />}
+      
       {pointsTest?.length > 0 && showPoints && pointsTest?.length < 5000 &&
         pointsTest.map((point) => (
           <Marker
             key={point.point_id}
             position={[point.latitude, point.longitude]}
-            icon={point.metadata === 'Occupied Taxi' ? greenIcon : blueIcon}
+            icon={point.metadata === 'Occupied Taxi' ? yellowIcon : blueIcon}
           >
             <Popup>
               <strong>Username:</strong> {point.username}
@@ -304,7 +313,52 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
               <strong>Metadata:</strong> {point.metadata}
             </Popup>
           </Marker>
-        ))}
+        ))
+      }
+
+      {pointsTest?.length > 0 && showCommonPlaces &&
+        pointsTest.filter(point=>point?.speed===0).map((point) => (
+          <Marker
+            key={point.point_id}
+            position={[point.latitude, point.longitude]}
+            icon={greenIcon}
+          >
+            <Popup>
+              <strong>Username:</strong> {point.username}
+              <br />
+              <strong>Date:</strong> {point.datetime}
+              <br />
+              <strong>Lon:</strong> {point.longitude}
+              <br />
+              <strong>Lat:</strong> {point.latitude}
+              <br />
+              <strong>Metadata:</strong> {point.metadata}
+            </Popup>
+          </Marker>
+        ))
+      }
+
+      {pointsTest?.length > 0 && outlierSpeedThreshold &&
+        pointsTest.filter(point=>point?.speed>=parseInt(outlierSpeedThreshold)).map((point) => (
+          <Marker
+            key={point.point_id}
+            position={[point.latitude, point.longitude]}
+            icon={greenIcon}
+          >
+            <Popup>
+              <strong>Username:</strong> {point.username}
+              <br />
+              <strong>Date:</strong> {point.datetime}
+              <br />
+              <strong>Lon:</strong> {point.longitude}
+              <br />
+              <strong>Lat:</strong> {point.latitude}
+              <br />
+              <strong>Metadata:</strong> {point.metadata}
+            </Popup>
+          </Marker>
+        ))
+      }
       
       {userStats.length > 0 && showMedianUsers &&
         userStats.map((user) => {
