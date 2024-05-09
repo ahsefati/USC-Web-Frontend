@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
-import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, Stack, Input, Button, FormControlLabel, Checkbox} from '@mui/material';
+import { Grid, Container, Typography, Card, Link, FormControl, InputLabel, Select, MenuItem, Stack, Input, Button, FormControlLabel, Checkbox, Tooltip} from '@mui/material';
 import {DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -10,6 +10,7 @@ import sqlCommands from '../../../data/sqlCommands';
 import statePolygons from '../../../data/statePolygons';
 
 import Iconify from '../../../components/iconify';
+import { Popup } from 'leaflet';
 // ----------------------------------------------------------------------
 
 RequestToExecuteForm.propTypes = {
@@ -100,6 +101,52 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                     }
                   </Select>
                 }
+                {vars.type==="normal_minmax_input" &&
+                  <Stack direction={"row"} spacing={2}>
+                    <Tooltip title={`${vars.varTitle} Min`}>
+                      <Input 
+                        sx={{width:"125px"}}
+                        value={formData[`min_${vars.varCode}`]}
+                        onChange={(e) =>
+                          {
+                            if (e.target.value!==''){
+                              setFormData({
+                                ...formData,
+                                [`min_${vars.varCode}`]: e.target.value,
+                              })
+                            }else{
+                              const updatedFormData = { ...formData };
+                              delete updatedFormData[`min_${vars.varCode}`];
+                              setFormData(updatedFormData);
+                            }
+                          }
+                        }
+                        placeholder='Min'
+                      />
+                    </Tooltip>
+                    <Tooltip title={`${vars.varTitle} Max`}>
+                      <Input
+                        sx={{width:"125px"}}
+                        value={formData[`max_${vars.varCode}`]}
+                        onChange={(e) =>
+                          {
+                            if (e.target.value!==''){
+                              setFormData({
+                                ...formData,
+                                [`max_${vars.varCode}`]: e.target.value,
+                              })
+                            }else{
+                              const updatedFormData = { ...formData };
+                              delete updatedFormData[`max_${vars.varCode}`];
+                              setFormData(updatedFormData);
+                            }
+                          }
+                        }
+                        placeholder='Max'
+                      />
+                    </Tooltip>
+                  </Stack>
+                } 
                 {vars.type==="normal_input" &&
                   <Input
                     fullwidth
@@ -122,24 +169,36 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                   />
                 }
                 { vars.type==="datetime_input" &&
-                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-US">
-                    <DateTimePicker
-                      value={formData[vars.varCode] ? new Date(formData[vars.varCode] * 1000) : null}
-                      onChange={(newValue) => {
-                        if (newValue!==''){
-                          setFormData({
-                            ...formData,
-                            [vars.varCode]: newValue.unix()
-                          })
-                        }else{
+                  <Stack direction={"row"}>
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-US">
+                      <DateTimePicker
+                        value={formData[vars.varCode] ? new Date(formData[vars.varCode] * 1000) : null}
+                        onChange={(newValue) => {
+                          if (newValue!==''){
+                            setFormData({
+                              ...formData,
+                              [vars.varCode]: newValue.unix()
+                            })
+                          }else{
+                            const updatedFormData = { ...formData };
+                            delete updatedFormData[vars.varCode];
+                            setFormData(updatedFormData);
+                          }
+                        }
+                        }
+                      />
+                      <Button variant='text' 
+                        onClick={()=>{
                           const updatedFormData = { ...formData };
                           delete updatedFormData[vars.varCode];
                           setFormData(updatedFormData);
-                        }
-                      }
-                      }
-                    />
-                  </LocalizationProvider>
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </LocalizationProvider>
+                  </Stack>
                 }
                 {vars.type==="area_input" &&
                   <textarea style={{height:'350px', width:'100%'}}/>

@@ -10,25 +10,15 @@ const sqlCommands = [
                 "varCode": "state_polygon",
                 "type": "select_input"
             },
-            {
-                "varTitle": "Min. Latitude",
-                "varCode": "min_lat",
-                "type": "normal_input"
+            { 
+                "varTitle": "Latitude",
+                "varCode": "lat",
+                "type": "normal_minmax_input"
             },
-            {
-                "varTitle": "Min. Longitude",
-                "varCode": "min_lon",
-                "type": "normal_input"
-            },
-            {
-                "varTitle": "Max. Latitude",
-                "varCode": "max_lat",
-                "type": "normal_input"
-            },
-            {
-                "varTitle": "Max. Longitude",
-                "varCode": "max_lon",
-                "type": "normal_input"
+            { 
+                "varTitle": "Longitude",
+                "varCode": "lon",
+                "type": "normal_minmax_input"
             },
             {
                 "varTitle": "Start of Time",
@@ -41,9 +31,9 @@ const sqlCommands = [
                 "type": "datetime_input"
             },
             {
-                "varTitle": "Detect Outliers",
-                "varCode": "detectOutliers",
-                "type": "checkbox_input"
+                "varTitle": "Speed Limit",
+                "varCode": "point_speed",
+                "type": "normal_minmax_input"
             },
             {
                 "varTitle": "Username",

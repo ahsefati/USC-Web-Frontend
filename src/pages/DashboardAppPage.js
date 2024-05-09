@@ -5,7 +5,7 @@ import 'chartjs-adapter-moment';
 import useScreenshot from 'use-screenshot-hook';
 
 // @mui
-import { Grid, Container, Stack, Button, Checkbox, FormControlLabel, Input} from '@mui/material';
+import { Grid, Container, Stack, Button, Checkbox, FormControlLabel, Input, Typography} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { useEffect, useRef, useState } from 'react';
@@ -40,7 +40,9 @@ export default function DashboardAppPage() {
   const [showMedianUsers, setShowMedianUsers] = useState(false)
   const [showGeneralHeatmap, setShowGeneralHeatmap] = useState(false)
   const [showTrajectoryLines, setShowTrajectoryLines] = useState(false)
-  const [showCommonPlaces, setShowCommonPlaces] = useState(false)
+  const [showSpeedRange, setShowSpeedRange] = useState(false)
+  const [minSpeedRange, setMinSpeedRange] = useState(null)
+  const [maxSpeedRange, setMaxSpeedRange] = useState(null)
   const [detectOutliers, setDetectOutliers] = useState(false)
   const [outlierSpeedThreshold, setOutlierSpeedThreshold] = useState(null)
 
@@ -141,27 +143,71 @@ export default function DashboardAppPage() {
                       <FormControlLabel control={<Checkbox checked={showMedianUsers} onClick={(e)=>setShowMedianUsers(e.target.checked)}/>} label="Show User Median Points?"/>
                       <FormControlLabel control={<Checkbox checked={showGeneralHeatmap} onClick={(e)=>setShowGeneralHeatmap(e.target.checked)}/>} label="Show Heat Map?"/>
                       <FormControlLabel control={<Checkbox checked={showTrajectoryLines} onClick={(e)=>setShowTrajectoryLines(e.target.checked)}/>} label="Show Trajectories?"/>
-                      <FormControlLabel control={<Checkbox checked={showCommonPlaces} onClick={(e)=>setShowCommonPlaces(e.target.checked)}/>} label="Show Common Places?"/>
+                      <FormControlLabel 
+                        control={
+                          <Checkbox checked={showSpeedRange} 
+                            onClick={(e)=>{
+                              if (e.target.checked){
+                                setShowSpeedRange(true)
+                                setDetectOutliers(false)
+                                setOutlierSpeedThreshold(null)
+                              }else {
+                                setShowSpeedRange(false)
+                                setMinSpeedRange(null)
+                                setMaxSpeedRange(null)
+                              }
+                            }}
+                          />
+                        } 
+                            label="Set Speed Range?"
+                      />
+                      {showSpeedRange &&
+                        <>
+                          <Input
+                            style={{width: "35px", marginRight: "4px", marginLeft:"-12px"}}
+                            value={minSpeedRange}
+                            onChange={(e) => {
+                              setMinSpeedRange(e.target.value || null)
+                            }}
+                            placeholder={"Min"}
+                          />
+                          <Input
+                            style={{width: "35px"}}
+                            value={maxSpeedRange}
+                            onChange={(e) => setMaxSpeedRange(e.target.value || null)}
+                            placeholder={"Max"}
+                          />
+                          <Typography sx={{display:'inline-flex', mr: "12px"}} variant='body2'>(m/s)</Typography>
+                        </>
+                      }
                       <FormControlLabel 
                         control={
                           <Checkbox checked={detectOutliers} 
-                          onClick={(e)=>{
-                              setDetectOutliers(e.target.checked)
-                              if (!e.target.checked){
-                                setOutlierSpeedThreshold(null)
-                              }
-                            }}
+                            onClick={(e)=>{
+                                if (e.target.checked){
+                                  setDetectOutliers(true)
+                                  setShowSpeedRange(false)
+                                  setMinSpeedRange(null)
+                                  setMaxSpeedRange(null)
+                                }else {
+                                  setDetectOutliers(false)
+                                  setOutlierSpeedThreshold(null)
+                                }
+                              }}
                           />
                         } 
                         label="Detect Outliers?"
                       />
                       {detectOutliers &&
+                      <>
                         <Input
-                          style={{width: "140px"}}
+                          style={{width: "130px", marginLeft:"-12px"}}
                           value={outlierSpeedThreshold}
                           onChange={(e) => setOutlierSpeedThreshold(e.target.value)}
                           placeholder={"Speed Threshold"}
                         />
+                        <Typography sx={{display:'inline-flex', mr: "12px"}} variant='body2'>(m/s)</Typography>
+                      </>
                       }
                     </Grid> 
                     <Grid item>
@@ -172,7 +218,7 @@ export default function DashboardAppPage() {
               }
               <div ref={mapRef}>
                 {resultMode===0 && 
-                  <ResultMap generalStats={generalStats} userStats={userStats} outlierSpeedThreshold={outlierSpeedThreshold} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} showTrajectoryLines={showTrajectoryLines} showCommonPlaces={showCommonPlaces} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
+                  <ResultMap generalStats={generalStats} userStats={userStats} minSpeedRange={minSpeedRange} maxSpeedRange={maxSpeedRange} outlierSpeedThreshold={outlierSpeedThreshold} showPoints={showPoints} showGeneralHeatmap={showGeneralHeatmap} showMedianUsers={showMedianUsers} showTrajectoryLines={showTrajectoryLines} formData={formData} setFormData={setFormData} latCenter={latCenter} lonCenter={lonCenter} pointsTest={pointsTest}/>
                 }
               </div>
               {resultMode===1 &&

@@ -41,7 +41,8 @@ const removeAllControls = (map) => {
 };
 
 
-const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, showTrajectoryLines, showCommonPlaces, outlierSpeedThreshold, generalStats}) => {
+const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, showTrajectoryLines, minSpeedRange, maxSpeedRange, outlierSpeedThreshold, generalStats}) => {
+  console.log(minSpeedRange, maxSpeedRange)
   const [ourMap, setOurMap] = useState()
   const [rectangleBounds, setRectangleBounds] = useState(null)
   const mapRef = useRef()
@@ -292,7 +293,7 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
           url="https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
-      {rectangleBounds && <Rectangle bounds={rectangleBounds} />}
+      {rectangleBounds && <Rectangle bounds={rectangleBounds} fill={false} color='red' fillOpacity={0} />}
       
       {pointsTest?.length > 0 && showPoints && pointsTest?.length < 5000 &&
         pointsTest.map((point) => (
@@ -302,37 +303,41 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
             icon={point.metadata === 'Occupied Taxi' ? yellowIcon : blueIcon}
           >
             <Popup>
-              <strong>Username:</strong> {point.username}
+              <strong>Username:</strong> {point?.username}
               <br />
-              <strong>Date:</strong> {point.datetime}
+              <strong>Date:</strong> {point?.datetime}
               <br />
-              <strong>Lon:</strong> {point.longitude}
+              <strong>Lon:</strong> {point?.longitude}
               <br />
-              <strong>Lat:</strong> {point.latitude}
+              <strong>Lat:</strong> {point?.latitude}
               <br />
-              <strong>Metadata:</strong> {point.metadata}
+              <strong>Speed:</strong> {point?.speed} (m/s)
+              <br />
+              <strong>Metadata:</strong> {point?.metadata}
             </Popup>
           </Marker>
         ))
       }
 
-      {pointsTest?.length > 0 && showCommonPlaces &&
-        pointsTest.filter(point=>point?.speed===0).map((point) => (
+      {pointsTest?.length > 0 && (minSpeedRange || maxSpeedRange) && 
+        pointsTest.filter(point=>((point?.speed>=minSpeedRange || minSpeedRange==null) && (point?.speed<=maxSpeedRange || maxSpeedRange==null))).map((point) => (
           <Marker
             key={point.point_id}
             position={[point.latitude, point.longitude]}
             icon={greenIcon}
           >
             <Popup>
-              <strong>Username:</strong> {point.username}
+              <strong>Username:</strong> {point?.username}
               <br />
-              <strong>Date:</strong> {point.datetime}
+              <strong>Date:</strong> {point?.datetime}
               <br />
-              <strong>Lon:</strong> {point.longitude}
+              <strong>Lon:</strong> {point?.longitude}
               <br />
-              <strong>Lat:</strong> {point.latitude}
+              <strong>Lat:</strong> {point?.latitude}
               <br />
-              <strong>Metadata:</strong> {point.metadata}
+              <strong>Speed:</strong> {point?.speed} (m/s)
+              <br />
+              <strong>Metadata:</strong> {point?.metadata}
             </Popup>
           </Marker>
         ))
@@ -346,15 +351,17 @@ const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, us
             icon={greenIcon}
           >
             <Popup>
-              <strong>Username:</strong> {point.username}
+              <strong>Username:</strong> {point?.username}
               <br />
-              <strong>Date:</strong> {point.datetime}
+              <strong>Date:</strong> {point?.datetime}
               <br />
-              <strong>Lon:</strong> {point.longitude}
+              <strong>Lon:</strong> {point?.longitude}
               <br />
-              <strong>Lat:</strong> {point.latitude}
+              <strong>Lat:</strong> {point?.latitude}
               <br />
-              <strong>Metadata:</strong> {point.metadata}
+              <strong>Speed:</strong> {point?.speed} (m/s)
+              <br />
+              <strong>Metadata:</strong> {point?.metadata}
             </Popup>
           </Marker>
         ))
