@@ -16,7 +16,14 @@ import { LoadingButton } from '@mui/lab';
 import ResultHistogram from 'src/sections/@dashboard/app/ResultHistogram';
 
 const isNumber = (n) => { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
-
+const getSuperscript = (exp) => {
+  const superscripts = {
+      '0': '⁰', '1': '¹', '2': '²', '3': '³',
+      '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷',
+      '8': '⁸', '9': '⁹'
+  };
+  return exp.toString().split('').map(char => superscripts[char] || char).join('');
+};
 
 
 export default function GenerateHistogramPage() {
@@ -34,6 +41,8 @@ export default function GenerateHistogramPage() {
 
   const [loading, setLoading] = useState(false)
   const [showMode, setShowMode] = useState(0)
+
+  const [showProportion, setShowProportion] = useState(true)
 
   const _getInfo = async () => {
     setLoading(true)
@@ -80,13 +89,22 @@ export default function GenerateHistogramPage() {
     }
 
     const ctx = document.getElementById('histogramChart');
+    const maxPointCount = Math.max(...data.map(item => item.point_count));
+    const totalPointCount = data.reduce((sum, item) => sum + parseInt(item.point_count), 0);
+
+    const exponent = Math.floor(Math.log10(maxPointCount));
+    const formatTick = (value) => {
+      return (value / Math.pow(10, exponent)).toFixed(1);
+    };
+
+
     new Chart(ctx, {
       type: 'bar',
       data: {
         labels: data.map(item => item.histo_value),
         datasets: [{
           label: 'Number of Points',
-          data: data.map(item => item.point_count),
+          data: showProportion?data.map(item => parseFloat(item.point_count)/parseFloat(totalPointCount)):data.map(item => item.point_count),
           backgroundColor: 'rgba(54, 162, 235, 0.5)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
@@ -100,15 +118,36 @@ export default function GenerateHistogramPage() {
           x: {
             title: {
               display: true,
-              text: formData["mode"]==="time"?'Time Interval (Seconds)':'Distance Interval (Meters)'
+              text: formData["mode"]==="time"?'Time Interval (Seconds)':'Distance Interval (Meters)',
+              font: {
+                size: 20,
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              font: {
+                size: 16,
+                weight: 'bold'
+              }
             }
           },
           y: {
             title: {
               display: true,
-              text: 'Number of Points'
+              text: showProportion? `Proportion of Points` : `Number of Points (×10${getSuperscript(exponent)})`,
+              font: {
+                size: 20,
+                weight: 'bold'
+              }
             },
-            beginAtZero: true
+            ticks: {
+              font: {
+                size: 16,
+                weight: 'bold'
+              },
+              beginAtZero: true,
+              callback: showProportion? undefined : formatTick
+            }
           }
         },
         plugins: {
@@ -158,7 +197,7 @@ export default function GenerateHistogramPage() {
         createChart(histogramInfo)
       }
     }
-  }, [histogramInfo, excludeZero, showMode, hOfChart, wOfChart])
+  }, [histogramInfo, excludeZero, showMode, hOfChart, wOfChart, showProportion])
 
   useEffect(()=>{
     const limitedData = histogramInfoAll.slice(0, parseInt(formData["limit"]))
@@ -314,7 +353,9 @@ export default function GenerateHistogramPage() {
                   onChange={(e) => setWOfChart(e.target.value)}
                   placeholder={'Chart Width'}
                 />
-                <FormControlLabel control={<Checkbox checked={excludeZero} onClick={(e)=>setExcludeZero(e.target.checked)}/>} label="Exclude Zero?"/>
+                <FormControlLabel sx={{mr:6}} control={<Checkbox checked={excludeZero} onClick={(e)=>setExcludeZero(e.target.checked)}/>} label="Exclude Zero?"/>
+                <FormControlLabel control={<Checkbox checked={!showProportion} onClick={(e)=>setShowProportion(!e.target.checked)}/>} label="Absolute Numbers?"/>
+
               </Grid>
               <Grid item>
                 <Button startIcon={<Iconify icon="material-symbols:cloud-download-outline"/>} sx={{minWidth:"180px"}} variant='outlined' onClick={downloadChart}>Download (PNG)</Button>

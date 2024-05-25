@@ -105,7 +105,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                   <Stack direction={"row"} spacing={2}>
                     <Tooltip title={`${vars.varTitle} Min`}>
                       <Input 
-                        sx={{width:"125px"}}
+                        sx={{width:"140px"}}
                         value={formData[`min_${vars.varCode}`]}
                         onChange={(e) =>
                           {
@@ -126,7 +126,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                     </Tooltip>
                     <Tooltip title={`${vars.varTitle} Max`}>
                       <Input
-                        sx={{width:"125px"}}
+                        sx={{width:"140px"}}
                         value={formData[`max_${vars.varCode}`]}
                         onChange={(e) =>
                           {
@@ -149,7 +149,7 @@ export default function RequestToExecuteForm({sources, selectedSource, setSelect
                 } 
                 {vars.type==="normal_input" &&
                   <Input
-                    fullwidth
+                    sx={{width: "300px"}}
                     value={formData[vars.varCode]}
                     onChange={(e) =>
                       {

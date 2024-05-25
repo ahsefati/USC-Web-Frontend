@@ -11,13 +11,18 @@ const sqlCommands = [
                 "type": "select_input"
             },
             { 
-                "varTitle": "Latitude",
+                "varTitle": "Latitude (degrees)",
                 "varCode": "lat",
                 "type": "normal_minmax_input"
             },
             { 
-                "varTitle": "Longitude",
+                "varTitle": "Longitude (degrees)",
                 "varCode": "lon",
+                "type": "normal_minmax_input"
+            },
+            {
+                "varTitle": "Speed Limit (m/s)",
+                "varCode": "point_speed",
                 "type": "normal_minmax_input"
             },
             {
@@ -29,11 +34,6 @@ const sqlCommands = [
                 "varTitle": "End of Time",
                 "varCode": "end_time",
                 "type": "datetime_input"
-            },
-            {
-                "varTitle": "Speed Limit",
-                "varCode": "point_speed",
-                "type": "normal_minmax_input"
             },
             {
                 "varTitle": "Username",
