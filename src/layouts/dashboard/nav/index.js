@@ -52,7 +52,6 @@ export default function Nav({ openNav, onCloseNav }) {
     if (openNav) {
       onCloseNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const renderContent = (
@@ -64,7 +63,7 @@ export default function Nav({ openNav, onCloseNav }) {
     >
 
       <Box sx={{mx: 2.5 }}>
-        <h1 style={{fontSize:'200%', marginTop:'12px'}}>USC-WEB</h1>
+        <h1 style={{fontSize:'200%', marginTop:'12px'}}>USC: TrajDash</h1>
       </Box>
     
       <Box sx={{ mb: 3, mx: 2.5 }}>

@@ -177,9 +177,9 @@ export default function GeneralInfoPage() {
         <title> USC Web | Users Info </title>
       </Helmet>
 
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Stack direction="row" alignItems="center" justifyContent="start" mb={1} mt={2}>
-          <Link to={'/dashboard'} style={{textDecoration:'none'}}>
+          <Link to={'/dashboard/generalanalysis'} style={{textDecoration:'none'}}>
             <Iconify icon={'ic:round-arrow-back'} width={24} height={24} style={{color:'black', marginRight:'16px'}}/>
           </Link>
           <Typography variant="h4" gutterBottom>

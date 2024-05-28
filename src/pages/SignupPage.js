@@ -85,7 +85,7 @@ export default function SignupPage() {
   return (
     <>
       <Helmet>
-        <title> USC-WEB | Sign up </title>
+        <title> USC: TrajDash | Sign up </title>
       </Helmet>
 
       <StyledRoot>
@@ -93,7 +93,7 @@ export default function SignupPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome to USC-WEB!
+              Hi, Welcome to USC: TrajDash!
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>
@@ -102,7 +102,7 @@ export default function SignupPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign up in USC-WEB
+              Sign up in USC: TrajDash
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 4 }}>

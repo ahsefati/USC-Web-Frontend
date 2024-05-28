@@ -122,7 +122,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title>USC-WEB | Dashboard</title>
+        <title>USC: TrajDash | Dashboard</title>
       </Helmet>
 
       <Container maxWidth="xxl">

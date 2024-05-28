@@ -85,7 +85,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> USC-WEB | Login </title>
+        <title> USC: TrajDash | Login </title>
       </Helmet>
 
       <StyledRoot>
@@ -93,7 +93,7 @@ export default function LoginPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome to USC-WEB!
+              Hi, Welcome to USC: TrajDash!
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>
@@ -102,7 +102,7 @@ export default function LoginPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign in to USC-WEB
+              Sign in to USC: TrajDash
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>

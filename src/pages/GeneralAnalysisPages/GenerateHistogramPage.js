@@ -218,9 +218,9 @@ export default function GenerateHistogramPage() {
         <title> USC Web | Users Info </title>
       </Helmet>
 
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Stack direction="row" alignItems="center" justifyContent="start" mb={1} mt={2}>
-          <Link to={'/dashboard'} style={{textDecoration:'none'}}>
+          <Link to={'/dashboard/generalanalysis'} style={{textDecoration:'none'}}>
             <Iconify icon={'ic:round-arrow-back'} width={24} height={24} style={{color:'black', marginRight:'16px'}}/>
           </Link>
           <Typography variant="h4" gutterBottom>
@@ -329,14 +329,14 @@ export default function GenerateHistogramPage() {
           </Stack>
           <LoadingButton sx={{minWidth:"180px"}} loading={loading} onClick={_getInfo} variant='contained' color='primary' size='large'>Generate</LoadingButton>
         </Stack>
-        <Stack direction={'row'} spacing={1}>
-          <Button onClick={()=>setShowMode(0)} variant={showMode?'outlined':'contained'}>Chart</Button>
-          <Button onClick={()=>setShowMode(1)} variant={!showMode?'outlined':'contained'}>Table</Button>
-        </Stack>
 
         {/* MODE == CHART */}
         {histogramInfo.length > 0 && showMode===0 &&
           <>
+            <Stack direction={'row'} spacing={1}>
+              <Button onClick={()=>setShowMode(0)} variant={showMode?'outlined':'contained'}>Chart</Button>
+              <Button onClick={()=>setShowMode(1)} variant={!showMode?'outlined':'contained'}>Table</Button>
+            </Stack>
             <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} sx={{mt:2}}>
               <Grid item>
                 <Typography variant='body' sx={{mr:1}}>Chart Height:</Typography>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton, Typography, Button, Grid } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, Typography, Button, Grid, Hidden } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import MenuIcon from '@mui/icons-material/MoreVert';
 import { Link, useLocation } from 'react-router-dom'; // If using react-router-dom
@@ -69,13 +69,13 @@ export default function Header({ onOpenNav }) {
         <Box sx={{display:{xs:'none', lg:'block'}}}>
           <Stack direction={'row'}>
               <Logo sx={{marginTop:'10px', height:'55px'}}/>
-              <h1 style={{color:'#990000', fontSize:'34px', fontFamily:'adobe caslon pro', margin:'20px 0px 5px 5px'}}>USC</h1>
+              <h1 style={{color:'#990000', fontSize:'34px', fontFamily:'adobe caslon pro', margin:'20px 0px 5px 5px'}}>USC: TrajDash</h1>
           </Stack>
         </Box>
         <Box sx={{display:{xs:'block', lg:'none'}}}>
           <Stack direction={'row'}>
               <Logo sx={{marginTop:'12px', height:'50px'}}/>
-              <h2 style={{color:'#990000', fontFamily:'adobe caslon pro', fontSize:'32px', margin:'20px 0px 0px 0px'}}>USC</h2>
+              <h2 style={{color:'#990000', fontFamily:'adobe caslon pro', fontSize:'32px', margin:'20px 0px 0px 0px'}}>USC: TrajDash</h2>
           </Stack>
         </Box>
 
@@ -89,35 +89,37 @@ export default function Header({ onOpenNav }) {
             sm: 0.5,
           }}
         >
-          <Link to={'/dashboard/landing'}>
-            <LoadingButton size='small' 
-              onClick={()=>setCurrentPath('/dashboard/landing')} 
-              variant={currentPath.includes('/dashboard/landing')?'contained':'outlined'}
-            >
-              Home
-            </LoadingButton>
-          </Link>
-          <Link to={'/dashboard/generalanalysis'}>
-            <LoadingButton size='small' onClick={()=>setCurrentPath('/dashboard/generalanalysis')} variant={currentPath.includes('/dashboard/generalanalysis')?'contained':'outlined'}>
-              General Analysis
-            </LoadingButton>
-          </Link>
-          <Link to={'/dashboard/dbquery'}>
-            <LoadingButton size='small' 
-              onClick={()=>setCurrentPath('/dashboard/dbquery')} 
-              variant={currentPath.includes('/dashboard/dbquery')?'contained':'outlined'}
-            >
-              Query
-            </LoadingButton>
-          </Link>
-          <Link to={'/dashboard/uplodadataset'}>
-            <LoadingButton size='small' 
-              onClick={()=>setCurrentPath('/dashboard/uplodadataset')}
-              variant={currentPath.includes('/dashboard/uplodadataset')?'contained':'outlined'}
-            >
-              Upload Dataset
-            </LoadingButton>
-          </Link>
+          <Hidden lgDown>
+            <Link to={'/dashboard/home'}>
+              <LoadingButton size='small' 
+                onClick={()=>setCurrentPath('/dashboard/home')} 
+                variant={currentPath.includes('/dashboard/home')?'contained':'outlined'}
+              >
+                Home
+              </LoadingButton>
+            </Link>
+            <Link to={'/dashboard/generalanalysis'}>
+              <LoadingButton size='small' onClick={()=>setCurrentPath('/dashboard/generalanalysis')} variant={currentPath.includes('/dashboard/generalanalysis')?'contained':'outlined'}>
+                General Analysis
+              </LoadingButton>
+            </Link>
+            <Link to={'/dashboard/dbquery'}>
+              <LoadingButton size='small' 
+                onClick={()=>setCurrentPath('/dashboard/dbquery')} 
+                variant={currentPath.includes('/dashboard/dbquery')?'contained':'outlined'}
+              >
+                Query
+              </LoadingButton>
+            </Link>
+            <Link to={'/dashboard/dbupload'}>
+              <LoadingButton size='small' 
+                onClick={()=>setCurrentPath('/dashboard/dbupload')}
+                variant={currentPath.includes('/dashboard/dbupload')?'contained':'outlined'}
+              >
+                Upload Dataset
+              </LoadingButton>
+            </Link>
+          </Hidden>
           <LanguagePopover/>
           {user &&
             <NotificationsPopover/>

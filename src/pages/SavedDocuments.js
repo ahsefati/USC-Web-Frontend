@@ -94,7 +94,7 @@ export default function SavedDocuments() {
   return (
     <>
       <Helmet>
-        <title> USC-WEB | Transactions </title>
+        <title> USC: TrajDash | Transactions </title>
       </Helmet>
 
       <Container>

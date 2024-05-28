@@ -21,7 +21,7 @@ export default function GeneralAnalysisPage() {
   return (
     <>
       <Helmet>
-        <title>USC-WEB | General Analysis</title>
+        <title>USC: TrajDash | General Analysis</title>
       </Helmet>
 
       <Container maxWidth="xxl">
@@ -47,6 +47,7 @@ export default function GeneralAnalysisPage() {
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <MyPaper 
+                disabled={true}
                 icon="material-symbols:local-see-outline" 
                 text="Common Places Analysis" 
                 description="Show where users wanted to go the most"
@@ -54,9 +55,10 @@ export default function GeneralAnalysisPage() {
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <MyPaper 
+                disabled={true}
                 icon="material-symbols:scatter-plot-outline" 
                 text="Outlier Analysis" 
-                description="Show outliers in a data source"
+                description="Analyze outliers in a data source"
               />
             </Grid>
           </Grid>

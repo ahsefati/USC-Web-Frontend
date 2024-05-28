@@ -14,9 +14,24 @@ import account from '../../../_mock/account';
 
 const MENU_OPTIONS_LOGGEDIN = [
   {
-    label: 'Dashboard',
+    label: 'Home',
     icon: 'eva:home-fill',
     to: '/dashboard'
+  },
+  {
+    label: 'General Analysis',
+    icon: 'eva:home-fill',
+    to: '/dashboard/generalanalysis'
+  },
+  {
+    label: 'Query',
+    icon: 'eva:home-fill',
+    to: '/dashboard/dbquery'
+  },
+  {
+    label: 'Upload Database',
+    icon: 'eva:home-fill',
+    to: '/dashboard/dbupload'
   },
   {
     label: 'Settings',
