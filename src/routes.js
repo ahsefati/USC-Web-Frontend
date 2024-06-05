@@ -20,6 +20,7 @@ import CoinDetailsPage from './pages/Tools/CoinDetailsPage';
 import GeneralInfoPage from './pages/GeneralAnalysisPages/GeneralInfoPage';
 import GenerateHistogramPage from './pages/GeneralAnalysisPages/GenerateHistogramPage';
 import HomePage from './pages/HomePage';
+import UploadDatasetPage from './pages/UploadDatasetPage';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +39,10 @@ export default function Router() {
         {path: 'generalanalysis/generalinfo', element: <GeneralInfoPage/>},
         {path: 'generalanalysis/generatehistogram', element: <GenerateHistogramPage/>},
         { path: 'dbquery', element: <DashboardAppPage /> },
+        { 
+          path: 'dbupload', 
+          element: <UploadDatasetPage />,
+        },
         { path: 'userprofile', element: <UserProfilePage /> },
         { path: 'coindetails/:id', element: <CoinDetailsPage /> },
       ],

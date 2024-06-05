@@ -21,7 +21,7 @@ export default function HomePage() {
               * TrajDash: A Trajectory Database Dashboard (Demo Paper)
               <br/>
               Mobility trajectories are important for many different research and
-              analysis tasks. We present TrajDahs, the first online dashboard
+              analysis tasks. We present TrajDash, the first online dashboard
               that gives access to different mobility datasets and enables users
               to query, analyze and visualize the trajectories. Our dashboard
               makes it convenient to find relevant trajectory data, summarize
@@ -35,7 +35,7 @@ export default function HomePage() {
             </div>
           </Grid>
           <Grid item xs={12} md={12} lg={7} style={{marginTop:"36px"}} order={{xs:1, lg:2}}>
-            <iframe style={{borderRadius:"24px", minHeight:"240px"}} width="100%" height="100%" src="https://www.youtube.com/embed/VqOqZBRZsj8?si=cFyP4JqYaRDnJlJZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe style={{borderRadius:"24px", minHeight:"240px"}} width="100%" height="100%" src="https://www.youtube.com/embed/WCjLd7QAJq8?si=fEwDhLfkeuhSIURl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </Grid>
         </Grid>
       </Container>

@@ -36,3 +36,13 @@ export const getHistogramInfo = async (formdata) => {
         return error
     }
 }
+
+
+export const postDataset = async (formdata) => {
+    try {
+        const {data} = await api.postDataset(formdata)
+        return data
+    } catch (error) {
+        return error
+    }
+}

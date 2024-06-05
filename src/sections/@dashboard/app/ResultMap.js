@@ -42,7 +42,6 @@ const removeAllControls = (map) => {
 
 
 const ResultMap = ({ latCenter, lonCenter, pointsTest, formData, setFormData, userStats, showPoints, showMedianUsers, showGeneralHeatmap, showTrajectoryLines, minSpeedRange, maxSpeedRange, outlierSpeedThreshold, generalStats}) => {
-  console.log(minSpeedRange, maxSpeedRange)
   const [ourMap, setOurMap] = useState()
   const [rectangleBounds, setRectangleBounds] = useState(null)
   const mapRef = useRef()
