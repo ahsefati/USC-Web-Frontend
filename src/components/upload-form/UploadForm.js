@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {Typography, Paper, Box, Input, Button, Grid, TextField, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import Iconify from '../iconify';
+import { baseURL } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ const UploadForm = () => {
     formData.append('referenceLink', referenceLink);
 
     try {
-      await axios.post('http://localhost:5000/upload', formData, {
+      await axios.post(`${baseURL}upload`, formData, {
         onUploadProgress: (progressEvent) => {
           const progress = (progressEvent.loaded / progressEvent.total) * 100;
           setUploadProgress(progress);

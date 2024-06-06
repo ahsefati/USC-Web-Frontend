@@ -28,7 +28,7 @@ export default function Page404() {
       <Container>
         <StyledContent sx={{ textAlign: 'center', alignItems: 'center' }}>
 
-          <Box onClick={()=>{window.location="https://USC: TrajDash.netlify.app"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', cursor:'pointer' }} component={"img"} src="/assets/usc-shield.webp"/>
+          <Box onClick={()=>{window.location="https:// TrajDash.netlify.app"}} sx={{ px: 2.5, py: 3, display: 'inline-flex', width:'80%', cursor:'pointer' }} component={"img"} src="/assets/usc-shield.webp"/>
           <Typography variant="h3" paragraph>
             Sorry! Page not found!
           </Typography>

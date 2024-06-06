@@ -11,7 +11,7 @@ export default function UploadDatasetPage() {
   return (
     <>
       <Helmet>
-        <title> Upload Dataset | USC: TrajDash </title>
+        <title> TrajDash | Upload Dataset </title>
       </Helmet>
 
       <Container maxWidth="xxl" sx={{justifyItems:'center', alignItems:'center'}}>

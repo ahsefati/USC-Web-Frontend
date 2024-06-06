@@ -215,7 +215,7 @@ export default function GenerateHistogramPage() {
   return (
     <>
       <Helmet>
-        <title> USC Web | Users Info </title>
+        <title> TrajDash | Users Info </title>
       </Helmet>
 
       <Container maxWidth="xxl">

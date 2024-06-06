@@ -28,7 +28,7 @@ export default function UserProfilePage() {
     {user?
       <>
         <Helmet>
-          <title> USC: TrajDash | Profile </title>
+          <title>  TrajDash | Profile </title>
         </Helmet>
 
         <Container maxWidth="xl">

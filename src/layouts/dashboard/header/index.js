@@ -68,14 +68,12 @@ export default function Header({ onOpenNav }) {
       <StyledToolbar>
         <Box sx={{display:{xs:'none', lg:'block'}}}>
           <Stack direction={'row'}>
-              <Logo sx={{marginTop:'10px', height:'55px'}}/>
-              <h1 style={{color:'#990000', fontSize:'34px', fontFamily:'adobe caslon pro', margin:'20px 0px 5px 5px'}}>USC: TrajDash</h1>
+              <Logo sx={{marginTop:'10px', height:'80px'}}/>
           </Stack>
         </Box>
         <Box sx={{display:{xs:'block', lg:'none'}}}>
           <Stack direction={'row'}>
-              <Logo sx={{marginTop:'12px', height:'50px'}}/>
-              <h2 style={{color:'#990000', fontFamily:'adobe caslon pro', fontSize:'32px', margin:'20px 0px 0px 0px'}}>USC: TrajDash</h2>
+              <Logo sx={{marginTop:'12px', height:'60px'}}/>
           </Stack>
         </Box>
 

@@ -1,1 +1,1 @@
-# USC Research - Web Dev - Frontend
+# Research - Web Dev - Frontend

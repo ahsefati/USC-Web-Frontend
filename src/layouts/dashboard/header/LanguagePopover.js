@@ -27,13 +27,13 @@ const LANGS = [
     icon: '/assets/icons/ic_flag_fr.svg',
     disabled: true
   },
-  {
-    id: 3,
-    value: 'fa',
-    label: 'Farsi',
-    icon: '/assets/icons/ic_flag_fa.svg',
-    disabled: true
-  },
+  // {
+  //   id: 3,
+  //   value: 'fa',
+  //   label: 'Farsi',
+  //   icon: '/assets/icons/ic_flag_fa.svg',
+  //   disabled: true
+  // },
 ];
 
 // ----------------------------------------------------------------------

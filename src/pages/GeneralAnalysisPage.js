@@ -21,7 +21,7 @@ export default function GeneralAnalysisPage() {
   return (
     <>
       <Helmet>
-        <title>USC: TrajDash | General Analysis</title>
+        <title> TrajDash | General Analysis</title>
       </Helmet>
 
       <Container maxWidth="xxl">

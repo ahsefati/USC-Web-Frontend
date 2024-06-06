@@ -214,7 +214,7 @@ export default function JobsAndFieldsPage() {
   return (
     <>
       <Helmet>
-        <title> USC: TrajDash | Compare Salaries </title>
+        <title>  TrajDash | Compare Salaries </title>
       </Helmet>
 
       <Container maxWidth="xl">

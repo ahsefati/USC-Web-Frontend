@@ -63,7 +63,7 @@ export default function Nav({ openNav, onCloseNav }) {
     >
 
       <Box sx={{mx: 2.5 }}>
-        <h1 style={{fontSize:'200%', marginTop:'12px'}}>USC: TrajDash</h1>
+        <h1 style={{fontSize:'200%', marginTop:'12px'}}> TrajDash</h1>
       </Box>
     
       <Box sx={{ mb: 3, mx: 2.5 }}>

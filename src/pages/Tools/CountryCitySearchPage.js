@@ -169,7 +169,7 @@ export default function CountryCitySearchPage() {
   return (
     <>
       <Helmet>
-        <title> USC: TrajDash | Countries & Cities </title>
+        <title>  TrajDash | Countries & Cities </title>
       </Helmet>
 
       <Container maxWidth="xl">

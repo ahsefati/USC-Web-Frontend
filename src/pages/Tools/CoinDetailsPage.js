@@ -141,7 +141,7 @@ export default function CoinDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> USC: TrajDash | {id} Details </title>
+        <title>  TrajDash | {id} Details </title>
       </Helmet>
 
       <Container maxWidth="xl">

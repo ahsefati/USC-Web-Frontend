@@ -212,7 +212,7 @@ export default function CostEstimationPage() {
   return (
     <>
       <Helmet>
-        <title> USC: TrajDash | Cost Estimation </title>
+        <title>  TrajDash | Cost Estimation </title>
       </Helmet>
 
       <Container maxWidth="xl">
